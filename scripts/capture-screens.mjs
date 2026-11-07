@@ -31,6 +31,14 @@ const SHOTS = [
     scrollTo: "#rate-sheet",
     nudge: -260,
   },
+  {
+    name: "desktop-stack-top",
+    width: 1512,
+    height: 950,
+    // Readout and filled bar in one frame, to prove the combined total has one owner.
+    query: "?stack=bfl-flux-1-schnell,bfl-flux-2-klein-4b",
+    scrollY: 0,
+  },
   { name: "mobile", width: 375, height: 812, scrollY: 0 },
   { name: "mobile-cards", width: 375, height: 812, scrollTo: "#rate-sheet", nudge: -200 },
 ];
