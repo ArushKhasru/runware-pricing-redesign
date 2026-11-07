@@ -55,9 +55,14 @@ export default function Page() {
             live rate sheet keeps behind a row expander.
           </p>
         </div>
-        <p className="text-label shrink-0 leading-relaxed text-rw-neutral-30 lg:max-w-[38ch] lg:text-right">
-          Unaffiliated concept · not endorsed by Runware
-          <br className="hidden lg:inline" /> rates are theirs
+        {/*
+          Explicit line breaks: left to wrap, this split as "…CONCEPT · NOT /
+          ENDORSED BY RUNWARE", fragmenting the negation across the line end — the one
+          phrase in a disclaimer that must not break.
+        */}
+        <p className="text-label shrink-0 leading-relaxed text-rw-neutral-30 lg:text-right">
+          <span className="block">Unaffiliated concept</span>
+          <span className="block">Not endorsed by Runware · rates are theirs</span>
         </p>
       </header>
 

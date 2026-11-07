@@ -28,7 +28,6 @@ import {
 } from "@/lib/pricing/filter";
 import {
   DEFAULT_ASSUMPTIONS,
-  estimate,
   totalMonthly,
   type Assumptions,
   type NormaliseMode,
@@ -114,15 +113,6 @@ export function RateSheet({ entries }: { entries: RateSheetEntry[] }) {
     [rows, params.mode, params.vol, assumptions],
   );
 
-  /** The cheapest way to do the stated volume, in the current view. */
-  const cheapest = useMemo(() => {
-    let best: { entry: RateSheetEntry; monthly: number } | null = null;
-    for (const entry of rows) {
-      const monthly = estimate(entry, params.vol, assumptions).monthly;
-      if (!best || monthly < best.monthly) best = { entry, monthly };
-    }
-    return best;
-  }, [rows, params.vol, assumptions]);
 
   /** Only show an assumption control if rows in view actually depend on it. */
   const needs = useMemo(() => {
@@ -188,7 +178,8 @@ export function RateSheet({ entries }: { entries: RateSheetEntry[] }) {
               ...(patch.cacheHitRate !== undefined ? { cache: patch.cacheHitRate } : {}),
             })
           }
-          cheapest={cheapest}
+          spread={bounds}
+          resultCount={rows.length}
           stackCount={stackEntries.length}
           stackTotal={stackTotal}
           needs={needs}
@@ -210,7 +201,6 @@ export function RateSheet({ entries }: { entries: RateSheetEntry[] }) {
               minPrice={params.min}
               maxPrice={params.max}
               onPriceRange={(min, max) => setParams({ min, max })}
-              bounds={bounds}
               mode={params.mode}
               resultCount={rows.length}
               totalCount={entries.length}

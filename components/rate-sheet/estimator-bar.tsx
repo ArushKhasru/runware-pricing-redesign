@@ -4,9 +4,8 @@ import { useId } from "react";
 import { Input, Select } from "@/components/ui/input";
 import { ToggleGroup } from "@/components/ui/toggle-group";
 import { Marker } from "./annotations";
-import { formatCount, formatUSD } from "@/lib/pricing/format";
+import { formatCount, formatUSD, formatUSDCompact } from "@/lib/pricing/format";
 import type { Assumptions, NormaliseMode } from "@/lib/pricing/estimate";
-import type { RateSheetEntry } from "@/lib/pricing/types";
 
 const MODES = [
   {
@@ -38,7 +37,8 @@ export function EstimatorBar({
   onMode,
   assumptions,
   onAssumptions,
-  cheapest,
+  spread,
+  resultCount,
   stackCount,
   stackTotal,
   needs,
@@ -50,7 +50,10 @@ export function EstimatorBar({
   onMode: (m: NormaliseMode) => void;
   assumptions: Assumptions;
   onAssumptions: (patch: Partial<Assumptions>) => void;
-  cheapest: { entry: RateSheetEntry; monthly: number } | null;
+  /** Cheapest and dearest monthly cost in the filtered set, at the stated volume. */
+  spread: { min: number; max: number };
+  /** How many models that spread covers. */
+  resultCount: number;
   /** Size and total of the comparison basket, which this readout reports. */
   stackCount: number;
   stackTotal: number;
@@ -136,7 +139,7 @@ export function EstimatorBar({
         */}
         <div className="min-w-0 border-t border-border/60 pt-4 lg:w-[21rem] lg:shrink-0 lg:border-t-0 lg:border-l lg:pt-0 lg:pl-8">
           <span className="text-label block text-muted-foreground">
-            {stackCount > 0 ? "Your monthly cost" : "Compare models"}
+            {stackCount > 0 ? "Your monthly cost" : `Per month at ${formatCount(volume)}`}
           </span>
 
           {stackCount > 0 ? (
@@ -158,19 +161,28 @@ export function EstimatorBar({
             </>
           ) : (
             <>
-              <p className="text-caption mt-2 text-muted-foreground">
-                Tick <span className="text-foreground">Compare</span> on any rows to total
-                them here.
+              {/*
+                The spread, not a single model's price. It is computed from the visitor's
+                own volume, true of the whole filtered set, and duplicates no row — and it
+                states the thesis better than any one number could: what you pay is a
+                function of your volume *and* your choice. Replaced by the basket total
+                the moment anything is ticked.
+              */}
+              <p
+                key={`${spread.min}-${spread.max}`}
+                data-numeric
+                className="animate-tick mt-1.5 font-mono text-[2.25rem] leading-none font-medium whitespace-nowrap text-primary"
+              >
+                {formatUSDCompact(spread.min)}
+                <span className="mx-1.5 text-rw-neutral-40">–</span>
+                {formatUSDCompact(spread.max)}
               </p>
-              {cheapest && (
-                <p className="text-caption mt-1.5 truncate text-rw-neutral-30">
-                  Cheapest in view: {cheapest.entry.name} at{" "}
-                  <span data-numeric className="font-mono text-muted-foreground">
-                    {formatUSD(cheapest.monthly)}
-                  </span>
-                  /mo
-                </p>
-              )}
+              <p className="text-caption mt-1.5 truncate text-muted-foreground">
+                across {formatCount(resultCount)} models
+                <span className="text-rw-neutral-30">
+                  {" · "}tick Compare to total your own
+                </span>
+              </p>
             </>
           )}
         </div>

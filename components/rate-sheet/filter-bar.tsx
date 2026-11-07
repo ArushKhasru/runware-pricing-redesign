@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input, Select } from "@/components/ui/input";
 import { Marker } from "./annotations";
 import { SORT_LABELS, type SortKey } from "@/lib/pricing/filter";
-import { formatCount, formatUSD } from "@/lib/pricing/format";
+import { formatCount } from "@/lib/pricing/format";
 import type { NormaliseMode } from "@/lib/pricing/estimate";
 
 const SORTS: SortKey[] = [
@@ -38,7 +38,6 @@ export function FilterBar({
   minPrice,
   maxPrice,
   onPriceRange,
-  bounds,
   mode,
   resultCount,
   totalCount,
@@ -57,7 +56,6 @@ export function FilterBar({
   minPrice: number | null;
   maxPrice: number | null;
   onPriceRange: (min: number | null, max: number | null) => void;
-  bounds: { min: number; max: number };
   mode: NormaliseMode;
   resultCount: number;
   totalCount: number;
@@ -220,10 +218,8 @@ export function FilterBar({
           {resultCount === 0 && <> — nothing matches these filters</>}
         </p>
         {resultCount > 0 && (
-          <p className="text-caption text-rw-neutral-30">
-            ranked by {UNIT_WORD[mode]} · {formatUSD(bounds.min)} to{" "}
-            {formatUSD(bounds.max)} in view
-          </p>
+          /* The spread itself is the estimator's headline figure; this only says the basis. */
+          <p className="text-caption text-rw-neutral-30">ranked by {UNIT_WORD[mode]}</p>
         )}
       </div>
     </div>

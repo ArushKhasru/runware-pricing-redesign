@@ -111,6 +111,7 @@ function TableRow({ entry, ctx }: { entry: RateSheetEntry; ctx: RowContext }) {
   const cost = splitPrice(est.monthly);
   const showSale = entry.onSale;
   const hiddenTiers = entry.rates.length - 1;
+  const isUnconfigured = entry.configuration.trim().toLowerCase() === "default";
 
   return (
     <tr
@@ -139,14 +140,21 @@ function TableRow({ entry, ctx }: { entry: RateSheetEntry; ctx: RowContext }) {
           >
             {entry.name}
           </a>
-          {entry.air && (
-            <span className="flex min-w-0 items-center gap-1.5">
-              <code className="truncate font-mono text-[11px] text-rw-neutral-30">
-                {entry.air}
-              </code>
-              <CopyModelId air={entry.air} name={entry.name} />
-            </span>
-          )}
+          <span className="flex min-w-0 items-center gap-1.5">
+            {entry.air && (
+              <>
+                <code className="truncate font-mono text-[11px] text-rw-neutral-30">
+                  {entry.air}
+                </code>
+                <CopyModelId air={entry.air} name={entry.name} />
+              </>
+            )}
+            {hiddenTiers > 0 && (
+              <span className="shrink-0 font-mono text-[10px] whitespace-nowrap text-rw-neutral-40">
+                +{hiddenTiers} {hiddenTiers === 1 ? "tier" : "tiers"}
+              </span>
+            )}
+          </span>
         </div>
       </td>
 
@@ -157,27 +165,19 @@ function TableRow({ entry, ctx }: { entry: RateSheetEntry; ctx: RowContext }) {
       <td className="h-12 max-w-[16rem] px-2 align-middle">
         <div className="flex min-w-0 flex-col gap-0.5">
           {/*
-            "Default" is Runware's placeholder for a model with nothing to configure,
-            and it filled most of this column saying nothing. Where that is the label,
-            the cell carries the tier count instead, which is information.
+            "Default" is Runware's placeholder for a model with nothing to configure.
+            Swapping one constant for another would not make the column informative, so
+            where there is no configuration to name the cell is simply empty. The tier
+            count moved to the Model cell, where the scanner is already looking.
           */}
-          {entry.configuration.toLowerCase() === "default" ? (
-            <span className="text-[13px] text-rw-neutral-30">
-              {hiddenTiers > 0
-                ? `${entry.rates.length} tiers`
-                : "Single tier"}
+          {isUnconfigured ? (
+            <span aria-hidden className="text-[13px] text-rw-neutral-40">
+              —
             </span>
           ) : (
-            <>
-              <span className="truncate text-[13px] text-muted-foreground">
-                {entry.configuration}
-              </span>
-              {hiddenTiers > 0 && (
-                <span className="font-mono text-[10px] text-rw-neutral-30">
-                  +{hiddenTiers} more {hiddenTiers === 1 ? "tier" : "tiers"}
-                </span>
-              )}
-            </>
+            <span className="truncate text-[13px] text-muted-foreground">
+              {entry.configuration}
+            </span>
           )}
         </div>
       </td>
