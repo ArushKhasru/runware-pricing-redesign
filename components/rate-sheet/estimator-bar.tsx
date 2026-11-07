@@ -146,23 +146,50 @@ export function EstimatorBar({
             duplication this readout was rebuilt to remove. The two objects answer
             different questions: what the market costs you, and what your shortlist does.
           */}
-          <p
-            key={`${spread.min}-${spread.max}`}
-            data-numeric
-            className="animate-tick mt-1.5 font-mono text-[1.875rem] leading-none font-medium whitespace-nowrap text-primary"
-          >
-            {formatUSD(spread.min)}
-            <span className="mx-1.5 text-rw-neutral-30">–</span>
-            {formatUSD(spread.max)}
-          </p>
-          <p className="text-caption mt-1.5 text-muted-foreground">
-            across {formatCount(resultCount)} models
-            <span className="text-rw-neutral-30">
-              {stackCount > 0
-                ? ` · ${stackCount} in your comparison below`
-                : " · tick Compare to total the models you would actually run"}
-            </span>
-          </p>
+          {resultCount === 0 ? (
+            /*
+              With nothing in view there is no spread, and the arithmetic would read
+              "$0 – $0" — a confident figure for a question with no answer, on a page
+              whose whole argument is that its numbers are right. An em dash says the
+              only true thing.
+            */
+            <>
+              <p
+                data-numeric
+                aria-hidden
+                className="mt-1.5 font-mono text-[1.875rem] leading-none font-medium text-rw-neutral-30"
+              >
+                —
+              </p>
+              <p className="text-caption mt-1.5 text-muted-foreground">
+                No models in view
+                <span className="text-rw-neutral-30">
+                  {" · "}widen the filters to price a range
+                </span>
+              </p>
+            </>
+          ) : (
+            <>
+              <p
+                key={`${spread.min}-${spread.max}`}
+                data-numeric
+                className="animate-tick mt-1.5 font-mono text-[1.875rem] leading-none font-medium whitespace-nowrap text-primary"
+              >
+                {formatUSD(spread.min)}
+                <span className="mx-1.5 text-rw-neutral-30">–</span>
+                {formatUSD(spread.max)}
+              </p>
+              <p className="text-caption mt-1.5 text-muted-foreground">
+                across {formatCount(resultCount)}{" "}
+                {resultCount === 1 ? "model" : "models"}
+                <span className="text-rw-neutral-30">
+                  {stackCount > 0
+                    ? ` · ${stackCount} in your comparison below`
+                    : " · tick Compare to total the models you would actually run"}
+                </span>
+              </p>
+            </>
+          )}
         </div>
       </div>
 
