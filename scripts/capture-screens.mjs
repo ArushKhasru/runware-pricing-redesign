@@ -22,6 +22,15 @@ const SHOTS = [
   { name: "desktop", width: 1512, height: 950, scrollY: 0 },
   { name: "desktop-table", width: 1512, height: 950, scrollTo: "#rate-sheet", nudge: -260 },
   { name: "desktop-notes", width: 1512, height: 950, query: "?notes=true", scrollTo: "#rate-sheet", nudge: -260 },
+  {
+    name: "desktop-stack",
+    width: 1512,
+    height: 950,
+    // Two rows ticked, so the sticky comparison bar is captured in its filled state.
+    query: "?stack=bfl-flux-1-schnell,bfl-flux-2-klein-4b",
+    scrollTo: "#rate-sheet",
+    nudge: -260,
+  },
   { name: "mobile", width: 375, height: 812, scrollY: 0 },
   { name: "mobile-cards", width: 375, height: 812, scrollTo: "#rate-sheet", nudge: -200 },
 ];

@@ -4,7 +4,7 @@ import { useId } from "react";
 import { Input, Select } from "@/components/ui/input";
 import { ToggleGroup } from "@/components/ui/toggle-group";
 import { Marker } from "./annotations";
-import { formatCount, formatUSD, formatUSDCompact } from "@/lib/pricing/format";
+import { formatCount, formatUSD } from "@/lib/pricing/format";
 import type { Assumptions, NormaliseMode } from "@/lib/pricing/estimate";
 
 const MODES = [
@@ -137,7 +137,7 @@ export function EstimatorBar({
           idle state names the affordance that fills it, since a comparison built from an
           unlabelled checkbox column is otherwise invisible.
         */}
-        <div className="min-w-0 border-t border-border/60 pt-4 lg:w-[21rem] lg:shrink-0 lg:border-t-0 lg:border-l lg:pt-0 lg:pl-8">
+        <div className="min-w-0 border-t border-border/60 pt-4 lg:w-[23rem] lg:shrink-0 lg:border-t-0 lg:border-l lg:pt-0 lg:pl-8">
           <span className="text-label block text-muted-foreground">
             {stackCount > 0 ? "Your monthly cost" : `Per month at ${formatCount(volume)}`}
           </span>
@@ -171,16 +171,18 @@ export function EstimatorBar({
               <p
                 key={`${spread.min}-${spread.max}`}
                 data-numeric
-                className="animate-tick mt-1.5 font-mono text-[2.25rem] leading-none font-medium whitespace-nowrap text-primary"
+                className="animate-tick mt-1.5 font-mono text-[1.875rem] leading-none font-medium whitespace-nowrap text-primary"
               >
-                {formatUSDCompact(spread.min)}
+                {/* Exact, not abbreviated: this page's argument is precise arithmetic,
+                    and this is the one figure set at display scale. */}
+                {formatUSD(spread.min)}
                 <span className="mx-1.5 text-rw-neutral-40">–</span>
-                {formatUSDCompact(spread.max)}
+                {formatUSD(spread.max)}
               </p>
-              <p className="text-caption mt-1.5 truncate text-muted-foreground">
+              <p className="text-caption mt-1.5 text-muted-foreground">
                 across {formatCount(resultCount)} models
                 <span className="text-rw-neutral-30">
-                  {" · "}tick Compare to total your own
+                  {" · "}tick Compare to total the models you would actually run
                 </span>
               </p>
             </>
