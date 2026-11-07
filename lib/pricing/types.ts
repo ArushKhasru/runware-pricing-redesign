@@ -34,16 +34,16 @@ export interface Rate {
   label: string;
   /** Price for one displayed unit. Token rates are already per 1M tokens. */
   amount: number;
-  /** Raw payload amount before unit conversion (per token for token rates). */
-  rawAmount: number;
-  /** Runware's internal unit id, e.g. "inputToken". Null for measured tiers. */
-  rawUnit: string | null;
   unit: DisplayUnit | string;
   dimension: Dimension;
   /** Set only for LLM token rates. */
   side: TokenSide | null;
+  /** Raw payload amount before unit conversion. Server-side fixture only. */
+  rawAmount?: number;
+  /** Runware's internal unit id, e.g. "inputToken". Server-side fixture only. */
+  rawUnit?: string | null;
   /** Measured latency for this tier, where Runware publishes one. */
-  latencyMs: number | null;
+  latencyMs?: number | null;
 }
 
 /** A measured example request, with Runware's own observed latency. */

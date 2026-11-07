@@ -88,7 +88,19 @@ export function applyFilters(
   const terms = query ? query.split(/\s+/) : [];
   const allowed = new Set(modalities);
 
-  const value = (e: RateSheetEntry) => normalisedValue(e, mode, volume, assumptions);
+  /**
+   * Normalised values are computed once per row and cached, not recomputed inside the
+   * comparator. A comparison-time call would run the estimator O(n log n) times — about
+   * 3,700 evaluations per sort of this sheet — for a value that cannot change mid-sort.
+   */
+  const cache = new Map<string, number>();
+  const value = (e: RateSheetEntry) => {
+    const hit = cache.get(e.slug);
+    if (hit !== undefined) return hit;
+    const v = normalisedValue(e, mode, volume, assumptions);
+    cache.set(e.slug, v);
+    return v;
+  };
 
   const rows = entries.filter((entry) => {
     if (allowed.size && !allowed.has(entry.modality)) return false;

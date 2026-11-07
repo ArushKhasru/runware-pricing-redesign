@@ -1,69 +1,139 @@
-import Image from "next/image";
+import { Suspense } from "react";
+import { RateSheet } from "@/components/rate-sheet/rate-sheet";
+import { getEntries, getMeta } from "@/lib/pricing/load";
+import { formatCount } from "@/lib/pricing/format";
 
-export default function Home() {
+/** Reserves the estimator and table space so the layout does not shift on hydration. */
+function SheetSkeleton() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+    <div aria-hidden className="flex flex-col gap-6">
+      <div className="h-[8.5rem] rounded-lg border border-border bg-card" />
+      <div className="h-11 rounded-md border border-border bg-input/30" />
+      <div className="flex flex-col gap-px">
+        {Array.from({ length: 10 }, (_, i) => (
+          <div key={i} className="h-12 border-b border-border/40" />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+export default function Page() {
+  const entries = getEntries();
+  const meta = getMeta();
+
+  const scraped = new Date(meta.scrapedAt).toLocaleDateString("en-GB", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
+
+  return (
+    <main className="mx-auto max-w-[var(--sheet-max)] px-4 pb-12 pt-10 sm:px-6 sm:pt-14">
+      <header className="max-w-[72ch]">
+        <h1 className="text-h1 text-foreground">
+          What {formatCount(meta.counts.rows)} models cost at your volume
+        </h1>
+        <p className="text-body mt-5 text-muted-foreground">
+          Every published Runware rate, normalised to the unit you actually count in and
+          priced against your own monthly volume — including the output-token rates the
+          live rate sheet keeps behind a row expander.
+        </p>
+        <p className="text-label mt-5 text-rw-neutral-30">
+          Unaffiliated concept · not endorsed by Runware · rates are theirs
+        </p>
+      </header>
+
+      {/* Sourced facts, with the snippet that turns a chosen model into a request. */}
+      <section
+        aria-label="Getting started"
+        className="mt-8 flex flex-col gap-4 rounded-lg border border-border bg-card p-4 sm:p-5 lg:flex-row lg:items-center lg:justify-between lg:gap-8"
+      >
+        <div className="min-w-0 max-w-[46ch]">
+          <p className="text-sm text-foreground">
+            New accounts on a business email get{" "}
+            <strong className="font-medium text-primary">$2 in free credits</strong>, and you
+            are only billed for requests that return an output.
+          </p>
+          <p className="text-caption mt-1.5 text-rw-neutral-30">
+            Both quoted from Runware&apos;s pricing FAQ. Every figure here is a list price;
+            volume discounts are negotiated with their sales team.
           </p>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+
+        <div className="min-w-0 lg:max-w-[46rem] lg:flex-1">
+          <p className="text-label mb-2 text-rw-neutral-30">
+            The Model ID column is this <code className="text-muted-foreground">model</code>{" "}
+            field
+          </p>
+          <pre className="overflow-x-auto rounded-md border border-border/60 bg-background p-3 font-mono text-[12px] leading-relaxed text-muted-foreground">
+            <code>{`curl https://api.runware.ai/v1 \\
+  -H "Authorization: Bearer $RUNWARE_API_KEY" \\
+  -H "Content-Type: application/json" \\
+  -d '[{"taskType":"imageInference",
+       "model":"bfl:flux@3-image-klein",
+       "positivePrompt":"a lighthouse at dusk",
+       "width":1024,"height":1024}]'`}</code>
+          </pre>
         </div>
-      </main>
-    </div>
+      </section>
+
+      {/*
+        The sheet reads its entire state from the URL, so it cannot be prerendered.
+        Everything above streams immediately; this boundary holds its space rather than
+        collapsing the page, so nothing jumps when the controls arrive.
+      */}
+      <div className="mt-10">
+        <Suspense fallback={<SheetSkeleton />}>
+          <RateSheet entries={entries} />
+        </Suspense>
+      </div>
+
+      <footer className="mt-16 border-t border-border/60 pt-8">
+        <div className="flex flex-col gap-6 sm:flex-row sm:justify-between">
+          <div className="max-w-[62ch]">
+            <h2 className="text-sm font-medium text-foreground">About this page</h2>
+            <p className="text-caption mt-2 text-muted-foreground">
+              An unsolicited redesign concept for the AI API pricing section of{" "}
+              <a
+                href="https://runware.ai/pricing"
+                target="_blank"
+                rel="noreferrer noopener"
+                className="text-foreground underline decoration-border hover:decoration-primary"
+              >
+                runware.ai/pricing
+              </a>
+              . It is not affiliated with, commissioned by, or endorsed by Runware, and it
+              uses neither their wordmark nor their licensed heading typeface. All prices are
+              theirs, read from the public page.
+            </p>
+            <p className="text-caption mt-2 text-muted-foreground">
+              No conversion metrics are claimed anywhere on this page. There is no access to
+              Runware&apos;s analytics, so each change is a hypothesis with a stated way to
+              measure it — the repository README sets those out.
+            </p>
+          </div>
+
+          <dl className="shrink-0 space-y-2 sm:text-right">
+            <div>
+              <dt className="text-label text-rw-neutral-30">Rates captured</dt>
+              <dd className="text-caption text-muted-foreground">{scraped}</dd>
+            </div>
+            <div>
+              <dt className="text-label text-rw-neutral-30">Rows · models</dt>
+              <dd data-numeric className="text-caption font-mono text-muted-foreground">
+                {formatCount(meta.counts.rows)} · {formatCount(meta.counts.models)}
+              </dd>
+            </div>
+            <div>
+              <dt className="text-label text-rw-neutral-30">With hidden tiers</dt>
+              <dd data-numeric className="text-caption font-mono text-muted-foreground">
+                {formatCount(meta.counts.withHiddenTiers)}
+              </dd>
+            </div>
+          </dl>
+        </div>
+      </footer>
+    </main>
   );
 }
