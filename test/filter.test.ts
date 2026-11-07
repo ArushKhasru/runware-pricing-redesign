@@ -97,6 +97,20 @@ describe("price range filtering", () => {
     }
   });
 
+  /**
+   * With nothing in view there is no spread to report. priceBounds returns a degenerate
+   * 0–0, which the readout must never render as a price range: "$0 – $0" is a confident
+   * figure for a question with no answer. The component shows an em dash instead, and
+   * this pins why.
+   */
+  it("returns a degenerate range for an empty set, which the UI must not render", () => {
+    const none = applyFilters(all, withFilters({ search: "zzzznotamodel" }));
+    expect(none).toHaveLength(0);
+
+    const bounds = priceBounds(none, "monthly", 10_000);
+    expect(bounds).toEqual({ min: 0, max: 0 });
+  });
+
   it("reports bounds that actually contain the data", () => {
     const { min, max } = priceBounds(all, "unit", 10_000);
     expect(min).toBeGreaterThan(0);

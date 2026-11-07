@@ -1,0 +1,8 @@
+# Keep line endings stable across platforms: this repo stores LF, always.
+# Without this, an editor or script writing CRLF on Windows turns a one-line
+# change into a whole-file diff and makes a PR unreviewable.
+* text=auto eol=lf
+
+*.png binary
+*.jpg binary
+*.woff2 binary
