@@ -1,7 +1,15 @@
 import { Suspense } from "react";
+import { CurlLine } from "@/components/rate-sheet/curl-line";
 import { RateSheet } from "@/components/rate-sheet/rate-sheet";
 import { getEntries, getMeta } from "@/lib/pricing/load";
 import { formatCount } from "@/lib/pricing/format";
+
+/** The Model ID column is exactly this `model` field. Verified against Runware's docs. */
+const CURL =
+  `curl https://api.runware.ai/v1 -H "Authorization: Bearer $RUNWARE_API_KEY" ` +
+  `-H "Content-Type: application/json" -d '[{"taskType":"imageInference",` +
+  `"model":"bfl:flux@3-image-klein","positivePrompt":"a lighthouse at dusk",` +
+  `"width":1024,"height":1024}]'`;
 
 /** Reserves the estimator and table space so the layout does not shift on hydration. */
 function SheetSkeleton() {
@@ -30,60 +38,46 @@ export default function Page() {
 
   return (
     <main className="mx-auto max-w-[var(--sheet-max)] px-4 pb-12 pt-10 sm:px-6 sm:pt-14">
-      <header className="max-w-[72ch]">
+      <header className="max-w-[48ch]">
         <h1 className="text-h1 text-foreground">
           What {formatCount(meta.counts.rows)} models cost at your volume
         </h1>
-        <p className="text-body mt-5 text-muted-foreground">
+        <p className="text-body mt-4 max-w-[68ch] text-muted-foreground">
           Every published Runware rate, normalised to the unit you actually count in and
           priced against your own monthly volume — including the output-token rates the
           live rate sheet keeps behind a row expander.
         </p>
-        <p className="text-label mt-5 text-rw-neutral-30">
-          Unaffiliated concept · not endorsed by Runware · rates are theirs
-        </p>
       </header>
 
-      {/* Sourced facts, with the snippet that turns a chosen model into a request. */}
+      {/*
+        Sourced facts and the snippet that turns a chosen model into a request, kept to
+        two lines so the rate sheet is not pushed out of the first viewport.
+      */}
       <section
         aria-label="Getting started"
-        className="mt-8 flex flex-col gap-4 rounded-lg border border-border bg-card p-4 sm:p-5 lg:flex-row lg:items-center lg:justify-between lg:gap-8"
+        className="mt-6 flex flex-col gap-3 lg:flex-row lg:items-center lg:gap-6"
       >
-        <div className="min-w-0 max-w-[46ch]">
-          <p className="text-sm text-foreground">
-            New accounts on a business email get{" "}
-            <strong className="font-medium text-primary">$2 in free credits</strong>, and you
-            are only billed for requests that return an output.
-          </p>
-          <p className="text-caption mt-1.5 text-rw-neutral-30">
-            Both quoted from Runware&apos;s pricing FAQ. Every figure here is a list price;
-            volume discounts are negotiated with their sales team.
-          </p>
-        </div>
-
-        <div className="min-w-0 lg:max-w-[46rem] lg:flex-1">
-          <p className="text-label mb-2 text-rw-neutral-30">
-            The Model ID column is this <code className="text-muted-foreground">model</code>{" "}
-            field
-          </p>
-          <pre className="overflow-x-auto rounded-md border border-border/60 bg-background p-3 font-mono text-[12px] leading-relaxed text-muted-foreground">
-            <code>{`curl https://api.runware.ai/v1 \\
-  -H "Authorization: Bearer $RUNWARE_API_KEY" \\
-  -H "Content-Type: application/json" \\
-  -d '[{"taskType":"imageInference",
-       "model":"bfl:flux@3-image-klein",
-       "positivePrompt":"a lighthouse at dusk",
-       "width":1024,"height":1024}]'`}</code>
-          </pre>
+        <p className="text-caption min-w-0 shrink-0 text-muted-foreground lg:max-w-[42ch]">
+          New accounts on a business email get{" "}
+          <strong className="font-medium text-primary">$2 in free credits</strong>, and you
+          are only billed for requests that return an output — both from Runware&apos;s FAQ.
+          Every figure here is a list price.
+        </p>
+        <div className="min-w-0 lg:flex-1">
+          <CurlLine snippet={CURL} />
         </div>
       </section>
+
+      <p className="text-label mt-4 text-rw-neutral-30">
+        Unaffiliated concept · not endorsed by Runware · rates are theirs
+      </p>
 
       {/*
         The sheet reads its entire state from the URL, so it cannot be prerendered.
         Everything above streams immediately; this boundary holds its space rather than
         collapsing the page, so nothing jumps when the controls arrive.
       */}
-      <div className="mt-10">
+      <div className="mt-7">
         <Suspense fallback={<SheetSkeleton />}>
           <RateSheet entries={entries} />
         </Suspense>

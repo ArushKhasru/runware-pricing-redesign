@@ -131,13 +131,22 @@ function sortRows(
   // Rows missing the sort dimension sink to the bottom rather than scattering.
   const sunk = (v: number | null) => (v == null ? Number.POSITIVE_INFINITY : v);
 
+  /**
+   * Price ties are common and large: 13 models open the sheet at exactly $0.0006/image.
+   * Breaking those alphabetically spends the first screen on a wall of identical figures,
+   * so the tie goes to the next axis a buyer actually decides on — measured speed — with
+   * the name last to keep the order stable between renders.
+   */
+  const byPriceThenSpeed = (a: RateSheetEntry, b: RateSheetEntry, delta: number) =>
+    delta || sunk(fastestLatency(a)) - sunk(fastestLatency(b)) || a.name.localeCompare(b.name);
+
   const sorted = [...rows];
   switch (sort) {
     case "price-asc":
-      sorted.sort((a, b) => value(a) - value(b) || a.name.localeCompare(b.name));
+      sorted.sort((a, b) => byPriceThenSpeed(a, b, value(a) - value(b)));
       break;
     case "price-desc":
-      sorted.sort((a, b) => value(b) - value(a) || a.name.localeCompare(b.name));
+      sorted.sort((a, b) => byPriceThenSpeed(a, b, value(b) - value(a)));
       break;
     case "latency-asc":
       sorted.sort(
