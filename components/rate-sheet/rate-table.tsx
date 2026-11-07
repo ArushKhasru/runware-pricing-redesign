@@ -150,7 +150,7 @@ function TableRow({ entry, ctx }: { entry: RateSheetEntry; ctx: RowContext }) {
               </>
             )}
             {hiddenTiers > 0 && (
-              <span className="shrink-0 font-mono text-[10px] whitespace-nowrap text-rw-neutral-40">
+              <span className="shrink-0 font-mono text-[10px] whitespace-nowrap text-rw-neutral-30">
                 +{hiddenTiers} {hiddenTiers === 1 ? "tier" : "tiers"}
               </span>
             )}
@@ -171,7 +171,7 @@ function TableRow({ entry, ctx }: { entry: RateSheetEntry; ctx: RowContext }) {
             count moved to the Model cell, where the scanner is already looking.
           */}
           {isUnconfigured ? (
-            <span aria-hidden className="text-[13px] text-rw-neutral-40">
+            <span aria-hidden className="text-[13px] text-rw-neutral-30">
               —
             </span>
           ) : (

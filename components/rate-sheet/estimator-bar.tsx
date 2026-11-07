@@ -152,7 +152,7 @@ export function EstimatorBar({
             className="animate-tick mt-1.5 font-mono text-[1.875rem] leading-none font-medium whitespace-nowrap text-primary"
           >
             {formatUSD(spread.min)}
-            <span className="mx-1.5 text-rw-neutral-40">–</span>
+            <span className="mx-1.5 text-rw-neutral-30">–</span>
             {formatUSD(spread.max)}
           </p>
           <p className="text-caption mt-1.5 text-muted-foreground">

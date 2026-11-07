@@ -34,7 +34,10 @@ OWN-WORLD: The incumbent Runware system, inherited unchanged. #1a1a1a ground, #1
 cards, #454545 hairline rules, 7px radius, no shadows. Figtree 15/1.7 for prose; JetBrains
 Mono tabular-nums for every figure without exception; 11px uppercase mono eyebrows at .075em.
 Restrained colour: the full surface is neutral greys, and the one green (#afff9f) is spent
-only on the computed total and the primary row action — never decoration. Recognizable with
+only on the computed total and the primary row action — never decoration.
+(Corrected after documentation: the build also ships a second accent, --rw-yellow-base
+#ffff7d, in a narrow sourced role — sale badges, the On-sale facet, and caveat glyphs. It
+is recorded as a Secondary in DESIGN.md; this block originally claimed a single accent.) Recognizable with
 all content removed by its mono figure columns and single green accent against near-black.
 
 STORY: The visitor understands that cost here is a function of their own volume, not a table

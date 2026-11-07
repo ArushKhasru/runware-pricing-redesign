@@ -155,6 +155,16 @@ components:
 
 ## Overview
 
+> **What this document is, and what it is not.** It describes the visual world as shipped,
+> derived from the code and the captures rather than from intentions. The build passed a
+> design finish review at `ship`, but that verdict had stated limits and this file does not
+> widen them. Reviewed: the eight scored fixes, three regressions, and the desktop, mobile
+> and filled-comparison-bar compositions. **Not reviewed, and therefore unverified rather
+> than approved:** the annotation overlay (`?notes=true`) in its state after three rounds
+> of layout change, and every interactive state a static capture cannot carry — hover,
+> focus, loading, the empty result set, and overlong content. Anyone extending this system
+> should treat those as open.
+
 **Creative North Star: "The Inherited Instrument"**
 
 This world was not invented. Every colour, radius and semantic token below was read off
@@ -237,7 +247,15 @@ would spend the accent on furniture and drown the figure above them.
 
 **The 40-Is-Not-Text Rule.** `{colors.neutral-40}` is a ramp step, not a text colour: it
 measures 3.27:1 on the ground. The quietest permitted text colour is
-`{colors.tabular-muted}`. Worst measured text contrast on the shipped surface is 6.19:1.
+`{colors.tabular-muted}`. Worst measured text contrast on the shipped surface is 6.19:1,
+with zero elements below the WCAG AA floor for their size.
+
+> The rule has teeth because it was broken. Documentation of this build found three places
+> still carrying `neutral-40` as text — a separator, an `aria-hidden` placeholder, and
+> `+N tiers`, which is genuinely informative — introduced *after* the 6.19:1 figure was
+> first measured, which made that published figure briefly untrue. All three were moved to
+> `{colors.tabular-muted}` and the measurement re-run. The lesson is that a contrast number
+> is only true as of its last measurement: re-measure after any change that adds text.
 
 ## Typography
 
