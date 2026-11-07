@@ -24,11 +24,11 @@ Matching this stack is therefore faithful to their codebase, not an imposition.
 
 - **416 rows** across **9 pages** at 50/page (8 × 50 + 16 = 416 — confirmed by counting
   `data-slot="table-row"` per page).
-- Rows are **not** models. Their FAQ: *"This page lists models with published pay-as-you-go
-  rates in the Runware content API (currently 300+)."* A model can occupy several rows
-  because it has several published tiers.
-- Each row has an expander: `aria-label="See all pricing tiers for <model>"`, so there is a
-  third level of pricing data below the 416 rows.
+- One row per model: **416 rows, 416 unique model slugs**. Their FAQ's *"currently 300+"*
+  turns out to count something narrower — **320** of the 416 have a published rate card,
+  while **96** are priced by measurement instead.
+- Each row has an expander: `aria-label="See all pricing tiers for <model>"`. **235 of 416
+  rows hide additional tiers** behind it.
 - The registry itself is far larger: *"The Runware registry supports 400K+ models overall."*
 
 ## Confirmed problems
@@ -71,6 +71,39 @@ Matching this stack is therefore faithful to their codebase, not an imposition.
    but it lives inside the contact-sales form (alongside firstName, company, jobTitle). The
    page asks you to self-report your volume in order to talk to someone, and never tells you
    what that volume would cost.
+
+## What the data payload revealed
+
+The page ships a structured payload alongside the markup, which is what the scraper reads:
+
+```json
+{ "model": "google-gemini-omni-flash-1-2", "air": "google:gemini@omni-flash-1.2",
+  "name": "Gemini Omni Flash 1.2", "releasedAt": "2026-11-05T00:00:00Z",
+  "pricingRates": [{ "amount": 0.02, "unit": "durationSecond", "label": "360p" }],
+  "pricingExamples": [{ "configuration": "video-edit · 720p",
+                        "price": "$$0.423", "latencyMs": 92284 }] }
+```
+
+Four things in it change the design:
+
+- **The visible LLM price is the cheapest dimension, and the expensive one is hidden.**
+  Kimi K3.1 Pro's row shows `Input tokens $2.00/1M`. Behind the expander sit
+  `Output tokens $10.00/1M` — **5× higher** — and `Cached input $0.20/1M`. All **62**
+  token-priced rows promote an *input* rate into the visible column. Sorting that column
+  for a TEXT model ranks by a number nobody is billed. This is the single strongest reason
+  the table needs normalising, and it is pinned by a test.
+- **Measured latency exists for 365 of 416 rows** (`latencyMs`), per configuration. Speed is
+  a first-order buyer concern and it is nowhere in the rendered table.
+- **`air` is the Model ID** the icon-only copy button copies. It can simply be shown.
+- **Runware's own page gives up on units in places.** `google-nano-banana-2-lite` is an
+  IMAGE model billed in tokens (input $0.25/1M, text output $1.50/1M, image output
+  **$30/1M**), and its visible row falls back to a worked example:
+  *"Example: 1K image output — $0.033603/image"*. Separately, **11 models are billed across
+  two dimensions at once** (per second *and* per image). A single PRICE column cannot
+  represent either case, and does not.
+
+One incidental bug, noted without snark: example prices are serialised as `"$$0.423"` —
+a double sigil from template interpolation. It is not visible in the rendered output.
 
 ## Corrections to earlier assumptions
 
