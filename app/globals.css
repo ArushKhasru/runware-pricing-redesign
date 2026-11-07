@@ -1,26 +1,211 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/*
+  Runware's own design tokens, read from their shipped stylesheets on 2026-11-07.
+  This file inherits their visual world rather than proposing a new one: the argument
+  of this concept is about what the interface does, not how it looks.
+
+  Two deliberate substitutions, both because the originals are licensed:
+    - their heading face `coxx` (a grotesque with a variable GAPS axis) is replaced by
+      Figtree, their own sans, at weight 500 with tight tracking
+    - their wordmark is not used at all
+*/
+
+@theme {
+  /* Brand ramp ------------------------------------------------------------ */
+  --color-rw-black: #1b1b1b;
+  --color-rw-white: #fbfbfb;
+
+  --color-rw-green-deep: #345c2d;
+  --color-rw-green-mid: #90f77c;
+  --color-rw-green-base: #afff9f;
+
+  --color-rw-yellow-deep: #58582c;
+  --color-rw-yellow-mid: #eeee5a;
+  --color-rw-yellow-base: #ffff7d;
+
+  --color-rw-neutral-0: #fbfbfb;
+  --color-rw-neutral-5: #f2f2f2;
+  --color-rw-neutral-10: #e8e8e8;
+  --color-rw-neutral-15: #d9d9d9;
+  --color-rw-neutral-20: #c9c9c9;
+  --color-rw-neutral-30: #9a9a9a;
+  --color-rw-neutral-40: #6b6b6b;
+  --color-rw-neutral-50: #585858;
+  --color-rw-neutral-60: #444444;
+  --color-rw-neutral-70: #393939;
+  --color-rw-neutral-80: #2e2e2e;
+  --color-rw-neutral-90: #252525;
+  --color-rw-neutral-100: #1b1b1b;
+
+  /* Semantic roles (their shadcn mapping) --------------------------------- */
+  --color-background: #1a1a1a;
+  --color-foreground: #f2f2f2;
+  --color-card: #1c1c1c;
+  --color-card-foreground: #ebebeb;
+  --color-popover: #1c1c1c;
+  --color-popover-foreground: #ebebeb;
+  --color-primary: #afff9f;
+  --color-primary-foreground: #1c1c1c;
+  --color-secondary: #292929;
+  --color-secondary-foreground: #ebebeb;
+  --color-muted: #292929;
+  --color-muted-foreground: #d9d9d9;
+  --color-icon-muted: #9a9a9a;
+  --color-tabular-muted: #9a9a9a;
+  --color-accent: #345c2d;
+  --color-accent-foreground: #ebebeb;
+  --color-destructive: #db4d00;
+  --color-warning: #ffff80;
+  --color-info: #6face2;
+  --color-border: #454545;
+  --color-input: #2e2e2e;
+  --color-ring: #afff9f;
+
+  /* Their radius scale ---------------------------------------------------- */
+  --radius: 7px;
+  --radius-sm: 4px;
+  --radius-md: 7px;
+  --radius-lg: 10px;
+
+  --font-sans: var(--font-figtree), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains), ui-monospace, monospace;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+@layer base {
+  html {
+    /* Tells the browser to style its own chrome — scrollbars, form controls — dark. */
+    color-scheme: dark;
+    scroll-behavior: smooth;
+  }
 
-@media (prefers-color-scheme: dark) {
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+    font-size: 15px;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  /*
+    The surfaces we did not draw still carry the design. Browser defaults for these
+    belong to no design system, so they are themed from the palette.
+  */
+  ::selection {
+    background-color: var(--color-rw-green-base);
+    color: var(--color-rw-neutral-100);
+  }
+
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    caret-color: var(--color-rw-green-base);
+    accent-color: var(--color-rw-green-base);
+  }
+
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-rw-neutral-60) transparent;
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background-color: var(--color-rw-neutral-60);
+    border: 2px solid var(--color-background);
+    border-radius: 999px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: var(--color-rw-neutral-50);
+  }
+
+  /* One focus treatment, used everywhere, never removed. */
+  :focus-visible {
+    outline: 2px solid var(--color-ring);
+    outline-offset: 2px;
+    border-radius: var(--radius-sm);
+  }
+
+  a {
+    text-underline-offset: 0.2em;
+    text-decoration-thickness: 1px;
+  }
+
+  /* Figures must never reflow as they tick. */
+  .font-mono,
+  [data-numeric] {
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: "tnum" 1;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer components {
+  /*
+    Their type scale, kept at their values. Note h2 is smaller than h3 in their system:
+    the scale is keyed to semantic role rather than to size order, and inheriting it
+    faithfully means not "correcting" that.
+  */
+  .text-h1 {
+    font-family: var(--font-sans);
+    font-size: clamp(2.25rem, 1.2rem + 4.2vw, 4.5rem);
+    font-weight: 500;
+    line-height: 1;
+    letter-spacing: -0.03em;
+    text-wrap: balance;
+  }
+
+  .text-h3 {
+    font-family: var(--font-sans);
+    font-size: 1.875rem;
+    font-weight: 500;
+    line-height: 1.15;
+    letter-spacing: -0.015em;
+    text-wrap: balance;
+  }
+
+  .text-h4 {
+    font-family: var(--font-sans);
+    font-size: 1.125rem;
+    font-weight: 500;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+  }
+
+  /* Their column-header / label voice: mono, small, tracked, uppercase. */
+  .text-label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 400;
+    line-height: 1.1;
+    letter-spacing: 0.075em;
+    text-transform: uppercase;
+  }
+
+  .text-body {
+    font-size: 15px;
+    line-height: 1.7;
+  }
+
+  .text-caption {
+    font-size: 13px;
+    line-height: 1.45;
+  }
 }

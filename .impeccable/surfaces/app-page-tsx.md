@@ -41,8 +41,9 @@ STORY: The visitor understands that cost here is a function of their own volume,
 cell. They believe the cheapness claim because they tested it with their own number rather
 than reading it. They act by launching Playground on a specific model.
 
-FIRST VIEWPORT: Mono eyebrow, then an h1 left-aligned at display scale, with the unaffiliated
-label as quiet mono beside it. Directly beneath, the estimator as one pinned instrument row:
+FIRST VIEWPORT: An h1 left-aligned at display scale carrying its own weight — no eyebrow or
+kicker above it — with the unaffiliated label as quiet mono beside it. Directly beneath, the
+estimator as one pinned instrument row:
 volume input, unit-normaliser toggle, and the live monthly total set in green mono at the
 largest figure size on the page. Filter row below it (search, modality, price range, sort).
 Then the rate sheet, ~8 rows visible, PRICE and YOUR COST right-aligned in mono, each row
