@@ -40,7 +40,6 @@ export function EstimatorBar({
   spread,
   resultCount,
   stackCount,
-  stackTotal,
   needs,
   notes,
 }: {
@@ -54,9 +53,8 @@ export function EstimatorBar({
   spread: { min: number; max: number };
   /** How many models that spread covers. */
   resultCount: number;
-  /** Size and total of the comparison basket, which this readout reports. */
+  /** How many models are in the comparison, for the secondary line only. */
   stackCount: number;
-  stackTotal: number;
   /** Which assumption controls are relevant to the rows currently in view. */
   needs: { seconds: boolean; tokens: boolean };
   notes: boolean;
@@ -139,54 +137,32 @@ export function EstimatorBar({
         */}
         <div className="min-w-0 border-t border-border/60 pt-4 lg:w-[23rem] lg:shrink-0 lg:border-t-0 lg:border-l lg:pt-0 lg:pl-8">
           <span className="text-label block text-muted-foreground">
-            {stackCount > 0 ? "Your monthly cost" : `Per month at ${formatCount(volume)}`}
+            {`Per month at ${formatCount(volume)}`}
           </span>
 
-          {stackCount > 0 ? (
-            <>
-              <p
-                key={stackTotal}
-                data-numeric
-                className="animate-tick mt-1.5 font-mono text-[2.25rem] leading-none font-medium text-primary"
-              >
-                {formatUSD(stackTotal)}
-              </p>
-              <p className="text-caption mt-1.5 truncate text-muted-foreground">
-                {stackCount} {stackCount === 1 ? "model" : "models"}
-                <span className="text-rw-neutral-30">
-                  {" · "}
-                  {formatCount(volume)} / month each
-                </span>
-              </p>
-            </>
-          ) : (
-            <>
-              {/*
-                The spread, not a single model's price. It is computed from the visitor's
-                own volume, true of the whole filtered set, and duplicates no row — and it
-                states the thesis better than any one number could: what you pay is a
-                function of your volume *and* your choice. Replaced by the basket total
-                the moment anything is ticked.
-              */}
-              <p
-                key={`${spread.min}-${spread.max}`}
-                data-numeric
-                className="animate-tick mt-1.5 font-mono text-[1.875rem] leading-none font-medium whitespace-nowrap text-primary"
-              >
-                {/* Exact, not abbreviated: this page's argument is precise arithmetic,
-                    and this is the one figure set at display scale. */}
-                {formatUSD(spread.min)}
-                <span className="mx-1.5 text-rw-neutral-40">–</span>
-                {formatUSD(spread.max)}
-              </p>
-              <p className="text-caption mt-1.5 text-muted-foreground">
-                across {formatCount(resultCount)} models
-                <span className="text-rw-neutral-30">
-                  {" · "}tick Compare to total the models you would actually run
-                </span>
-              </p>
-            </>
-          )}
+          {/*
+            Always the spread, in every state. The comparison bar owns the combined
+            total; showing it here too would put one number in two places, which is the
+            duplication this readout was rebuilt to remove. The two objects answer
+            different questions: what the market costs you, and what your shortlist does.
+          */}
+          <p
+            key={`${spread.min}-${spread.max}`}
+            data-numeric
+            className="animate-tick mt-1.5 font-mono text-[1.875rem] leading-none font-medium whitespace-nowrap text-primary"
+          >
+            {formatUSD(spread.min)}
+            <span className="mx-1.5 text-rw-neutral-40">–</span>
+            {formatUSD(spread.max)}
+          </p>
+          <p className="text-caption mt-1.5 text-muted-foreground">
+            across {formatCount(resultCount)} models
+            <span className="text-rw-neutral-30">
+              {stackCount > 0
+                ? ` · ${stackCount} in your comparison below`
+                : " · tick Compare to total the models you would actually run"}
+            </span>
+          </p>
         </div>
       </div>
 

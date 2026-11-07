@@ -28,11 +28,11 @@ import {
 } from "@/lib/pricing/filter";
 import {
   DEFAULT_ASSUMPTIONS,
-  totalMonthly,
   type Assumptions,
   type NormaliseMode,
 } from "@/lib/pricing/estimate";
 import type { RateSheetEntry } from "@/lib/pricing/types";
+import { cn } from "@/lib/utils";
 
 const SORT_KEYS = [
   "price-asc",
@@ -131,11 +131,6 @@ export function RateSheet({ entries }: { entries: RateSheetEntry[] }) {
     [params.stack, entries],
   );
 
-  /** What the comparison basket costs per month — the estimator's headline figure. */
-  const stackTotal = useMemo(
-    () => totalMonthly(stackEntries, params.vol, assumptions),
-    [stackEntries, params.vol, assumptions],
-  );
 
   const toggleStack = useCallback(
     (slug: string) => {
@@ -181,7 +176,6 @@ export function RateSheet({ entries }: { entries: RateSheetEntry[] }) {
           spread={bounds}
           resultCount={rows.length}
           stackCount={stackEntries.length}
-          stackTotal={stackTotal}
           needs={needs}
           notes={params.notes}
         />
@@ -225,7 +219,14 @@ export function RateSheet({ entries }: { entries: RateSheetEntry[] }) {
           </Button>
         </div>
 
-        <div id="rate-sheet" className="scroll-mt-6">
+        {/*
+          While the comparison bar is pinned it would otherwise cover the last row at
+          rest, so the sheet reserves its height instead of overlapping content.
+        */}
+        <div
+          id="rate-sheet"
+          className={cn("scroll-mt-6", stackEntries.length > 0 && "pb-28 sm:pb-24")}
+        >
           <RateTable rows={rows} ctx={ctx} />
           <RateCards rows={rows} ctx={ctx} />
         </div>

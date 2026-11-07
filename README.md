@@ -110,6 +110,12 @@ filtered rows would be meaningless — nobody buys every model. Instead you sele
 three you would actually run, and the bar totals those, labelled with the assumption it
 rests on.
 
+**The headline figure is the spread, not a single price.** At rest the estimator reads
+`$6.00 – $130,000 per month at 10,000`, computed across whatever is in view. A single
+"cheapest" number would just restate the first row; the spread duplicates nothing and says
+the actual thing: what you pay is a function of your volume *and* your choice. It becomes
+your basket total the moment you tick a row.
+
 **Every assumption is on screen and adjustable.** Only per-image-style units are exact. A
 per-second rate needs a clip length; a token rate needs a request shape. Each estimate
 shows its assumption or the word `exact`, and the defaults are Runware's own worked example
