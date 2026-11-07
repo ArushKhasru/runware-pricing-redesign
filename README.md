@@ -9,7 +9,7 @@ the live page.
 > their wordmark and not `coxx`, their licensed heading typeface. The deployed page is
 > `noindex` so it can never compete with their own pricing page in search.
 
-**Live:** _[(deploy URL)](https://runware-pricing-redesign.vercel.app/)_ · **Stack:** Next.js 16 · TypeScript · Tailwind v4 · shadcn
+**Live:** _[(Demo URL)](https://runware-pricing-redesign.vercel.app/)_ · **Stack:** Next.js 16 · TypeScript · Tailwind v4 · shadcn
 conventions · `nuqs` · Vitest
 
 ---
