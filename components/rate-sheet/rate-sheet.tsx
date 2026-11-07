@@ -29,6 +29,7 @@ import {
 import {
   DEFAULT_ASSUMPTIONS,
   estimate,
+  totalMonthly,
   type Assumptions,
   type NormaliseMode,
 } from "@/lib/pricing/estimate";
@@ -140,6 +141,12 @@ export function RateSheet({ entries }: { entries: RateSheetEntry[] }) {
     [params.stack, entries],
   );
 
+  /** What the comparison basket costs per month — the estimator's headline figure. */
+  const stackTotal = useMemo(
+    () => totalMonthly(stackEntries, params.vol, assumptions),
+    [stackEntries, params.vol, assumptions],
+  );
+
   const toggleStack = useCallback(
     (slug: string) => {
       setParams((prev) => ({
@@ -182,6 +189,8 @@ export function RateSheet({ entries }: { entries: RateSheetEntry[] }) {
             })
           }
           cheapest={cheapest}
+          stackCount={stackEntries.length}
+          stackTotal={stackTotal}
           needs={needs}
           notes={params.notes}
         />

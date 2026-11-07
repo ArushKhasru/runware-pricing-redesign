@@ -38,14 +38,26 @@ export default function Page() {
 
   return (
     <main className="mx-auto max-w-[var(--sheet-max)] px-4 pb-12 pt-10 sm:px-6 sm:pt-14">
-      <header className="max-w-[48ch]">
-        <h1 className="text-h1 text-foreground">
-          What {formatCount(meta.counts.rows)} models cost at your volume
-        </h1>
-        <p className="text-body mt-4 max-w-[68ch] text-muted-foreground">
-          Every published Runware rate, normalised to the unit you actually count in and
-          priced against your own monthly volume — including the output-token rates the
-          live rate sheet keeps behind a row expander.
+      {/*
+        The heading takes the full measure and the attribution sits beside it rather than
+        below the fold furniture. A narrow measure broke the rag on the page's key number
+        and left ~1000x370px of empty ground to the right, which the rate sheet was paying
+        for in lost rows.
+      */}
+      <header className="flex flex-col gap-x-12 gap-y-5 lg:flex-row lg:items-end lg:justify-between">
+        <div className="min-w-0 max-w-[62ch]">
+          <h1 className="text-h1 text-foreground">
+            What {formatCount(meta.counts.rows)} models cost at your volume
+          </h1>
+          <p className="text-body mt-4 max-w-[68ch] text-muted-foreground">
+            Every published Runware rate, normalised to the unit you actually count in and
+            priced against your own monthly volume — including the output-token rates the
+            live rate sheet keeps behind a row expander.
+          </p>
+        </div>
+        <p className="text-label shrink-0 leading-relaxed text-rw-neutral-30 lg:max-w-[38ch] lg:text-right">
+          Unaffiliated concept · not endorsed by Runware
+          <br className="hidden lg:inline" /> rates are theirs
         </p>
       </header>
 
@@ -59,18 +71,14 @@ export default function Page() {
       >
         <p className="text-caption min-w-0 shrink-0 text-muted-foreground lg:max-w-[42ch]">
           New accounts on a business email get{" "}
-          <strong className="font-medium text-primary">$2 in free credits</strong>, and you
-          are only billed for requests that return an output — both from Runware&apos;s FAQ.
-          Every figure here is a list price.
+          <strong className="font-medium text-foreground">$2 in free credits</strong>, and
+          you are only billed for requests that return an output — both from
+          Runware&apos;s FAQ. Every figure here is a list price.
         </p>
         <div className="min-w-0 lg:flex-1">
           <CurlLine snippet={CURL} />
         </div>
       </section>
-
-      <p className="text-label mt-4 text-rw-neutral-30">
-        Unaffiliated concept · not endorsed by Runware · rates are theirs
-      </p>
 
       {/*
         The sheet reads its entire state from the URL, so it cannot be prerendered.

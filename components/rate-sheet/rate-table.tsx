@@ -52,9 +52,8 @@ export function RateTable({ rows, ctx }: { rows: RateSheetEntry[]; ctx: RowConte
         </caption>
         <thead>
           <tr className="border-b border-border">
-            <th scope="col" className="w-8 px-2 py-2.5">
-              <span className="sr-only">Add to comparison</span>
-            </th>
+            {/* Named, not an unlabelled checkbox: the basket total depends on it. */}
+            <Th>Compare</Th>
             <Th>
               Model
               <Marker id={6} active={ctx.notes} />
@@ -157,13 +156,28 @@ function TableRow({ entry, ctx }: { entry: RateSheetEntry; ctx: RowContext }) {
 
       <td className="h-12 max-w-[16rem] px-2 align-middle">
         <div className="flex min-w-0 flex-col gap-0.5">
-          <span className="truncate text-[13px] text-muted-foreground">
-            {entry.configuration}
-          </span>
-          {hiddenTiers > 0 && (
-            <span className="font-mono text-[10px] text-rw-neutral-30">
-              +{hiddenTiers} more {hiddenTiers === 1 ? "tier" : "tiers"}
+          {/*
+            "Default" is Runware's placeholder for a model with nothing to configure,
+            and it filled most of this column saying nothing. Where that is the label,
+            the cell carries the tier count instead, which is information.
+          */}
+          {entry.configuration.toLowerCase() === "default" ? (
+            <span className="text-[13px] text-rw-neutral-30">
+              {hiddenTiers > 0
+                ? `${entry.rates.length} tiers`
+                : "Single tier"}
             </span>
+          ) : (
+            <>
+              <span className="truncate text-[13px] text-muted-foreground">
+                {entry.configuration}
+              </span>
+              {hiddenTiers > 0 && (
+                <span className="font-mono text-[10px] text-rw-neutral-30">
+                  +{hiddenTiers} more {hiddenTiers === 1 ? "tier" : "tiers"}
+                </span>
+              )}
+            </>
           )}
         </div>
       </td>
@@ -196,22 +210,30 @@ function TableRow({ entry, ctx }: { entry: RateSheetEntry; ctx: RowContext }) {
         </div>
       </td>
 
-      {/* What it costs at the stated volume, with its assumption shown rather than hidden. */}
+      {/*
+        What it costs at the stated volume. Set in the foreground, not the accent: a
+        column of identical green figures makes green a column colour rather than the
+        mark of the page's computed answer, which belongs to the readout and the basket
+        total. The sublabel appears only when there is an assumption to disclose —
+        "exact" under every row was noise that said nothing.
+      */}
       <td className="h-12 px-2 align-middle">
         <div className="flex flex-col items-end gap-0.5 whitespace-nowrap">
-          <span data-numeric className="font-mono text-sm font-medium text-primary">
+          <span data-numeric className="font-mono text-sm font-medium text-foreground">
             {cost.whole}
-            {cost.fraction && <span className="opacity-70">.{cost.fraction}</span>}
+            {cost.fraction && <span className="text-tabular-muted">.{cost.fraction}</span>}
           </span>
-          <span className="flex items-center gap-1 font-mono text-[10px] text-rw-neutral-30">
-            {est.assumption ?? "exact"}
-            {est.caveat && (
-              <span title={est.caveat} className="text-rw-yellow-base">
-                <Info aria-hidden className="size-3" />
-                <span className="sr-only">{est.caveat}</span>
-              </span>
-            )}
-          </span>
+          {(est.assumption || est.caveat) && (
+            <span className="flex items-center gap-1 font-mono text-[10px] text-rw-neutral-30">
+              {est.assumption}
+              {est.caveat && (
+                <span title={est.caveat} className="text-rw-yellow-base">
+                  <Info aria-hidden className="size-3" />
+                  <span className="sr-only">{est.caveat}</span>
+                </span>
+              )}
+            </span>
+          )}
         </div>
       </td>
 
@@ -230,10 +252,11 @@ function TableRow({ entry, ctx }: { entry: RateSheetEntry; ctx: RowContext }) {
           target="_blank"
           rel="noreferrer noopener"
           aria-label={`Launch ${entry.name} in Playground`}
+          /* The primary row action, which the colour rule reserves the accent for. */
           className={cn(
             "inline-flex h-8 items-center gap-1.5 whitespace-nowrap rounded-md border",
-            "border-border px-2.5 text-[13px] font-medium text-muted-foreground",
-            "transition-colors hover:border-primary/50 hover:bg-primary/10 hover:text-primary",
+            "border-primary/40 px-2.5 text-[13px] font-medium text-primary",
+            "transition-colors hover:bg-primary/10 hover:border-primary/70",
           )}
         >
           Playground

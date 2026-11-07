@@ -39,6 +39,8 @@ export function EstimatorBar({
   assumptions,
   onAssumptions,
   cheapest,
+  stackCount,
+  stackTotal,
   needs,
   notes,
 }: {
@@ -49,6 +51,9 @@ export function EstimatorBar({
   assumptions: Assumptions;
   onAssumptions: (patch: Partial<Assumptions>) => void;
   cheapest: { entry: RateSheetEntry; monthly: number } | null;
+  /** Size and total of the comparison basket, which this readout reports. */
+  stackCount: number;
+  stackTotal: number;
   /** Which assumption controls are relevant to the rows currently in view. */
   needs: { seconds: boolean; tokens: boolean };
   notes: boolean;
@@ -120,32 +125,53 @@ export function EstimatorBar({
           </div>
         </div>
 
-        {/* The output, adjacent to the inputs that produce it */}
-        <div className="min-w-0 border-t border-border/60 pt-4 lg:border-t-0 lg:border-l lg:pt-0 lg:pl-8">
+        {/*
+          The output, adjacent to the inputs that produce it.
+
+          This previously read "cheapest in view", which restated the first table row and
+          made the page's largest figure its least informative one. It now answers the
+          question the surface exists for — what the models you picked cost you — and its
+          idle state names the affordance that fills it, since a comparison built from an
+          unlabelled checkbox column is otherwise invisible.
+        */}
+        <div className="min-w-0 border-t border-border/60 pt-4 lg:w-[21rem] lg:shrink-0 lg:border-t-0 lg:border-l lg:pt-0 lg:pl-8">
           <span className="text-label block text-muted-foreground">
-            Cheapest in view, per month
+            {stackCount > 0 ? "Your monthly cost" : "Compare models"}
           </span>
-          {cheapest ? (
+
+          {stackCount > 0 ? (
             <>
               <p
-                key={cheapest.monthly}
+                key={stackTotal}
                 data-numeric
                 className="animate-tick mt-1.5 font-mono text-[2.25rem] leading-none font-medium text-primary"
               >
-                {formatUSD(cheapest.monthly)}
+                {formatUSD(stackTotal)}
               </p>
-              <p className="mt-1.5 truncate text-caption text-muted-foreground">
-                {cheapest.entry.name}
+              <p className="text-caption mt-1.5 truncate text-muted-foreground">
+                {stackCount} {stackCount === 1 ? "model" : "models"}
                 <span className="text-rw-neutral-30">
                   {" · "}
-                  {formatCount(volume)} × {cheapest.entry.configuration}
+                  {formatCount(volume)} / month each
                 </span>
               </p>
             </>
           ) : (
-            <p className="mt-1.5 font-mono text-[2.25rem] leading-none font-medium text-rw-neutral-30">
-              —
-            </p>
+            <>
+              <p className="text-caption mt-2 text-muted-foreground">
+                Tick <span className="text-foreground">Compare</span> on any rows to total
+                them here.
+              </p>
+              {cheapest && (
+                <p className="text-caption mt-1.5 truncate text-rw-neutral-30">
+                  Cheapest in view: {cheapest.entry.name} at{" "}
+                  <span data-numeric className="font-mono text-muted-foreground">
+                    {formatUSD(cheapest.monthly)}
+                  </span>
+                  /mo
+                </p>
+              )}
+            </>
           )}
         </div>
       </div>
