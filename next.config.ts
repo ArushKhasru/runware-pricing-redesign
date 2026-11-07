@@ -3,6 +3,9 @@ import { fileURLToPath } from "node:url";
 import { dirname } from "node:path";
 
 const nextConfig: NextConfig = {
+  // The dev overlay badge paints over page content at the bottom-left, which corrupts
+  // design review captures taken against the dev server.
+  devIndicators: false,
   cacheComponents: true,
   partialPrefetching: true,
   turbopack: {

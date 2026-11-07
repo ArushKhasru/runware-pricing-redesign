@@ -162,10 +162,34 @@ describe("sorting", () => {
     expect(rows[0].savePct).toBeGreaterThanOrEqual(rows[1].savePct ?? 0);
   });
 
-  it("breaks ties by name so the order never shuffles between renders", () => {
+  it("is deterministic between renders", () => {
     const a = applyFilters(all, withFilters({ sort: "price-asc" })).map((r) => r.slug);
     const b = applyFilters(all, withFilters({ sort: "price-asc" })).map((r) => r.slug);
     expect(a).toEqual(b);
+  });
+
+  /**
+   * 13 models open the sheet at exactly the same price. Breaking that tie alphabetically
+   * would spend the first screen on identical figures, so equal prices are ordered by
+   * measured speed — the next axis a buyer decides on.
+   */
+  it("breaks price ties by measured speed, not alphabetically", () => {
+    const rows = applyFilters(all, withFilters({ sort: "price-asc", mode: "monthly" }));
+
+    let tiedGroups = 0;
+    for (let i = 1; i < rows.length; i++) {
+      const prev = normalisedValue(rows[i - 1], "monthly", DEFAULT_FILTERS.volume);
+      const curr = normalisedValue(rows[i], "monthly", DEFAULT_FILTERS.volume);
+      if (prev !== curr) continue;
+
+      const a = fastestLatency(rows[i - 1]);
+      const b = fastestLatency(rows[i]);
+      if (a == null || b == null) continue; // rows without latency sink within the tie
+      tiedGroups++;
+      expect(a, `${rows[i - 1].slug} before ${rows[i].slug}`).toBeLessThanOrEqual(b);
+    }
+    // The assertion is only meaningful if the data actually contains ties.
+    expect(tiedGroups).toBeGreaterThan(5);
   });
 });
 
