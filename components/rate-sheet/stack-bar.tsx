@@ -35,8 +35,11 @@ export function StackBar({
   }));
   const total = priced.reduce((sum, p) => sum + p.monthly, 0);
 
+  // The wrapper paints the ground so no sheet row shows through the gutter beneath the
+  // floating card — content rendering below a pinned element reads as a layering bug,
+  // which the blur cannot fix.
   return (
-    <div className="pointer-events-none sticky bottom-0 z-30 -mx-4 mt-6 px-4 pb-4 sm:-mx-6 sm:px-6">
+    <div className="pointer-events-none sticky bottom-0 z-30 -mx-4 mt-6 bg-background px-4 pb-4 sm:-mx-6 sm:px-6">
       <div className="pointer-events-auto mx-auto max-w-[var(--sheet-max)] rounded-lg border border-border bg-card/95 p-3 backdrop-blur-sm sm:p-4">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-6">
           <div className="min-w-0">
@@ -53,7 +56,7 @@ export function StackBar({
                     </span>
                     <span
                       data-numeric
-                      className="font-mono text-[13px] font-medium text-primary"
+                      className="font-mono text-[13px] font-medium text-foreground"
                     >
                       {formatUSD(monthly)}
                     </span>
@@ -78,7 +81,7 @@ export function StackBar({
               </span>
               <span
                 data-numeric
-                className="animate-tick font-mono text-[1.75rem] leading-none font-medium text-primary"
+                className="animate-tick font-mono text-[1.5rem] leading-none font-medium text-primary"
                 key={total}
               >
                 {formatUSD(total)}

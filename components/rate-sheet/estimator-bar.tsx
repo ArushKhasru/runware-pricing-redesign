@@ -6,7 +6,6 @@ import { ToggleGroup } from "@/components/ui/toggle-group";
 import { Marker } from "./annotations";
 import { formatCount, formatUSD } from "@/lib/pricing/format";
 import type { Assumptions, NormaliseMode } from "@/lib/pricing/estimate";
-import type { RateSheetEntry } from "@/lib/pricing/types";
 
 const MODES = [
   {
@@ -38,7 +37,9 @@ export function EstimatorBar({
   onMode,
   assumptions,
   onAssumptions,
-  cheapest,
+  spread,
+  resultCount,
+  stackCount,
   needs,
   notes,
 }: {
@@ -48,7 +49,12 @@ export function EstimatorBar({
   onMode: (m: NormaliseMode) => void;
   assumptions: Assumptions;
   onAssumptions: (patch: Partial<Assumptions>) => void;
-  cheapest: { entry: RateSheetEntry; monthly: number } | null;
+  /** Cheapest and dearest monthly cost in the filtered set, at the stated volume. */
+  spread: { min: number; max: number };
+  /** How many models that spread covers. */
+  resultCount: number;
+  /** How many models are in the comparison, for the secondary line only. */
+  stackCount: number;
   /** Which assumption controls are relevant to the rows currently in view. */
   needs: { seconds: boolean; tokens: boolean };
   notes: boolean;
@@ -120,33 +126,43 @@ export function EstimatorBar({
           </div>
         </div>
 
-        {/* The output, adjacent to the inputs that produce it */}
-        <div className="min-w-0 border-t border-border/60 pt-4 lg:border-t-0 lg:border-l lg:pt-0 lg:pl-8">
+        {/*
+          The output, adjacent to the inputs that produce it.
+
+          This previously read "cheapest in view", which restated the first table row and
+          made the page's largest figure its least informative one. It now answers the
+          question the surface exists for — what the models you picked cost you — and its
+          idle state names the affordance that fills it, since a comparison built from an
+          unlabelled checkbox column is otherwise invisible.
+        */}
+        <div className="min-w-0 border-t border-border/60 pt-4 lg:w-[23rem] lg:shrink-0 lg:border-t-0 lg:border-l lg:pt-0 lg:pl-8">
           <span className="text-label block text-muted-foreground">
-            Cheapest in view, per month
+            {`Per month at ${formatCount(volume)}`}
           </span>
-          {cheapest ? (
-            <>
-              <p
-                key={cheapest.monthly}
-                data-numeric
-                className="animate-tick mt-1.5 font-mono text-[2.25rem] leading-none font-medium text-primary"
-              >
-                {formatUSD(cheapest.monthly)}
-              </p>
-              <p className="mt-1.5 truncate text-caption text-muted-foreground">
-                {cheapest.entry.name}
-                <span className="text-rw-neutral-30">
-                  {" · "}
-                  {formatCount(volume)} × {cheapest.entry.configuration}
-                </span>
-              </p>
-            </>
-          ) : (
-            <p className="mt-1.5 font-mono text-[2.25rem] leading-none font-medium text-rw-neutral-30">
-              —
-            </p>
-          )}
+
+          {/*
+            Always the spread, in every state. The comparison bar owns the combined
+            total; showing it here too would put one number in two places, which is the
+            duplication this readout was rebuilt to remove. The two objects answer
+            different questions: what the market costs you, and what your shortlist does.
+          */}
+          <p
+            key={`${spread.min}-${spread.max}`}
+            data-numeric
+            className="animate-tick mt-1.5 font-mono text-[1.875rem] leading-none font-medium whitespace-nowrap text-primary"
+          >
+            {formatUSD(spread.min)}
+            <span className="mx-1.5 text-rw-neutral-30">–</span>
+            {formatUSD(spread.max)}
+          </p>
+          <p className="text-caption mt-1.5 text-muted-foreground">
+            across {formatCount(resultCount)} models
+            <span className="text-rw-neutral-30">
+              {stackCount > 0
+                ? ` · ${stackCount} in your comparison below`
+                : " · tick Compare to total the models you would actually run"}
+            </span>
+          </p>
         </div>
       </div>
 

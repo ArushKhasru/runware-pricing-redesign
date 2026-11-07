@@ -34,7 +34,10 @@ OWN-WORLD: The incumbent Runware system, inherited unchanged. #1a1a1a ground, #1
 cards, #454545 hairline rules, 7px radius, no shadows. Figtree 15/1.7 for prose; JetBrains
 Mono tabular-nums for every figure without exception; 11px uppercase mono eyebrows at .075em.
 Restrained colour: the full surface is neutral greys, and the one green (#afff9f) is spent
-only on the computed total and the primary row action — never decoration. Recognizable with
+only on the computed total and the primary row action — never decoration.
+(Corrected after documentation: the build also ships a second accent, --rw-yellow-base
+#ffff7d, in a narrow sourced role — sale badges, the On-sale facet, and caveat glyphs. It
+is recorded as a Secondary in DESIGN.md; this block originally claimed a single accent.) Recognizable with
 all content removed by its mono figure columns and single green accent against near-black.
 
 STORY: The visitor understands that cost here is a function of their own volume, not a table
@@ -46,18 +49,25 @@ kicker above it — with the unaffiliated label as quiet mono beside it. Directl
 estimator as one pinned instrument row:
 volume input, unit-normaliser toggle, and the live monthly total set in green mono at the
 largest figure size on the page. Filter row below it (search, modality, price range, sort).
-Then the rate sheet, ~8 rows visible, PRICE and YOUR COST right-aligned in mono, each row
-carrying a visible "Try in Playground". Primary action is per-row; the aggregate total stays
-pinned as the visitor filters.
+Then the rate sheet with its header and first rows in frame, List price and Your cost
+right-aligned in mono, each row carrying a visible "Try in Playground". Primary action is
+per-row; the aggregate total stays pinned as the visitor filters.
+
+(Amended after the finish review: this block originally promised ~8 rows in the first
+viewport. Request item 8 pins the free-credits line and the curl snippet above the sheet,
+and that is user-instructed content, not builder preference. The reviewer ruled that the
+rows be recovered from the hero's empty right half rather than by cutting that content,
+which is what landed; the line now states the reachable target.)
 
 FORM: Chosen form — *computed rate sheet*: a fixed estimator instrument above a dense table
 whose every row answers in the visitor's own unit. First of six considered, ahead of a split
 calculator panel, per-row expandable calculators, a volume-first wizard, a comparison cart,
 and modality tabs; it wins because it changes every row at once without adding a step.
-seed: none (unavailable)
+seed: not rolled — concept-seed was never run for this surface, because the request was precisely specified (nine numbered changes against an existing page) and the playbook excludes a structure round for that case. No roll printed a reference, so none is claimed here.
 
 FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the
 verdict, DESIGN.md, and every shipping raster carrying its provenance
 
-Unresolved: heading face substitute for `coxx` (pending — Figtree tight-tracked is the
-fallback); whether the annotation overlay ships enabled on first load.
+Resolved: `coxx` is substituted by Figtree at weight 500 with tight tracking — their own
+sans, rather than importing an unrelated display face into their identity. The annotation
+overlay ships off by default and is toggled by `?notes=true`.

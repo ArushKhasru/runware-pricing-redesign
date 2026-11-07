@@ -38,6 +38,7 @@ export function RateCards({ rows, ctx }: { rows: RateSheetEntry[]; ctx: RowConte
 function RateCard({ entry, ctx }: { entry: RateSheetEntry; ctx: RowContext }) {
   const { whole, fraction } = splitPrice(entry.shownAmount ?? 0);
   const est = estimate(entry, ctx.volume, ctx.assumptions);
+  const { whole: costWhole, fraction: costFraction } = splitPrice(est.monthly);
   const selected = ctx.stack.includes(entry.slug);
   const hidden = entry.rates.length - 1;
   const latency = fastestLatency(entry);
@@ -74,44 +75,53 @@ function RateCard({ entry, ctx }: { entry: RateSheetEntry; ctx: RowContext }) {
         )}
       </div>
 
-      {/* The price, as the largest thing on the card */}
+      {/*
+        The computed cost is the largest element, not the list unit price. Sizing the
+        published per-image rate above the figure this page exists to produce would
+        reproduce the hierarchy of the rate sheet it replaces. The list price stays
+        beneath it as the provenance of the big number.
+      */}
       <div className="mt-4 flex items-end justify-between gap-4">
         <p className="min-w-0">
-          <span className="flex items-baseline gap-2">
+          <span className="text-label block text-rw-neutral-30">Your cost / month</span>
+          <span
+            data-numeric
+            className="mt-1 block font-mono text-[2rem] leading-none font-medium text-foreground"
+          >
+            {costWhole}
+            {costFraction && <span className="text-tabular-muted">.{costFraction}</span>}
+          </span>
+          {(est.assumption || est.caveat) && (
+            <span className="mt-1.5 flex items-center gap-1 font-mono text-[10px] text-rw-neutral-30">
+              {est.assumption}
+              {est.caveat && (
+                <span title={est.caveat} className="text-rw-yellow-base">
+                  <Info aria-hidden className="size-3" />
+                  <span className="sr-only">{est.caveat}</span>
+                </span>
+              )}
+            </span>
+          )}
+        </p>
+
+        <p className="shrink-0 text-right">
+          <span className="text-label block text-rw-neutral-30">List price</span>
+          <span className="mt-1 flex items-baseline justify-end gap-1.5">
             {entry.onSale && (
               <span
                 data-numeric
-                className="font-mono text-sm text-tabular-muted line-through"
+                className="font-mono text-[11px] text-tabular-muted line-through"
               >
                 {formatUSD(entry.listAmount!)}
               </span>
             )}
-            <span
-              data-numeric
-              className="font-mono text-[2rem] leading-none font-medium text-foreground"
-            >
+            <span data-numeric className="font-mono text-sm text-muted-foreground">
               {whole}
               {fraction && <span className="text-tabular-muted">.{fraction}</span>}
             </span>
           </span>
-          <span className="mt-1 block font-mono text-[11px] text-rw-neutral-30">
+          <span className="mt-0.5 block font-mono text-[10px] text-rw-neutral-30">
             {unitSuffix}
-          </span>
-        </p>
-
-        <p className="shrink-0 text-right">
-          <span className="text-label block text-rw-neutral-30">Your cost</span>
-          <span data-numeric className="font-mono text-base font-medium text-primary">
-            {formatUSD(est.monthly)}
-          </span>
-          <span className="mt-0.5 flex items-center justify-end gap-1 font-mono text-[10px] text-rw-neutral-30">
-            {est.assumption ?? "exact"}
-            {est.caveat && (
-              <span title={est.caveat} className="text-rw-yellow-base">
-                <Info aria-hidden className="size-3" />
-                <span className="sr-only">{est.caveat}</span>
-              </span>
-            )}
           </span>
         </p>
       </div>
@@ -153,11 +163,11 @@ function RateCard({ entry, ctx }: { entry: RateSheetEntry; ctx: RowContext }) {
           rel="noreferrer noopener"
           aria-label={`Launch ${entry.name} in Playground`}
           /*
-            Deliberately not the solid accent. Repeated down 416 cards, a filled green
-            button would spend the one accent colour on furniture and leave it competing
-            with the computed cost, which is the figure this page exists to show.
+            The primary row action, which the colour rule reserves the accent for. Tinted
+            rather than filled: 416 solid green bars would spend the accent on furniture
+            and drown the computed figure above them.
           */
-          className="inline-flex h-11 flex-1 items-center justify-center gap-1.5 rounded-md border border-border px-4 text-sm font-medium text-foreground transition-colors hover:border-primary/50 hover:bg-primary/10 hover:text-primary"
+          className="inline-flex h-11 flex-1 items-center justify-center gap-1.5 rounded-md border border-primary/40 px-4 text-sm font-medium text-primary transition-colors hover:border-primary/70 hover:bg-primary/10"
         >
           Try in Playground
           <ArrowUpRight aria-hidden className="size-4" />
@@ -172,13 +182,18 @@ function RateCard({ entry, ctx }: { entry: RateSheetEntry; ctx: RowContext }) {
               : `Add ${entry.name} to the comparison`
           }
           className={cn(
-            "inline-flex size-11 shrink-0 items-center justify-center rounded-md border transition-colors",
+            "inline-flex h-11 shrink-0 items-center justify-center gap-1.5 rounded-md border px-3 text-[13px] font-medium transition-colors",
             selected
               ? "border-primary/50 bg-primary/10 text-primary"
               : "border-border text-muted-foreground",
           )}
         >
-          {selected ? <Check aria-hidden /> : <Plus aria-hidden />}
+          {selected ? (
+            <Check aria-hidden className="size-4" />
+          ) : (
+            <Plus aria-hidden className="size-4" />
+          )}
+          Compare
         </button>
       </div>
     </li>

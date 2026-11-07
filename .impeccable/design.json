@@ -1,0 +1,240 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-07T00:00:00.000Z",
+  "title": "Design System: Runware Rate Sheet (Unaffiliated Redesign Concept)",
+  "extensions": {
+    "colorMeta": {
+      "primary": {
+        "role": "primary",
+        "displayName": "Signal Green",
+        "canonical": "#afff9f",
+        "tonalRamp": ["#0f2a0b", "#1b4415", "#2a5e22", "#345c2d", "#4f9641", "#6fc75d", "#90f77c", "#afff9f"]
+      },
+      "green-mid": {
+        "role": "primary",
+        "displayName": "Green Mid",
+        "canonical": "#90f77c",
+        "tonalRamp": ["#0d2409", "#173b12", "#24561c", "#327428", "#469c37", "#62c74e", "#90f77c", "#c4ffb8"]
+      },
+      "green-deep": {
+        "role": "primary",
+        "displayName": "Green Deep",
+        "canonical": "#345c2d",
+        "tonalRamp": ["#0a1408", "#13240f", "#1d3a18", "#294a22", "#345c2d", "#4a7f40", "#6ba95e", "#9ad68c"]
+      },
+      "yellow-base": {
+        "role": "secondary",
+        "displayName": "Caveat Yellow",
+        "canonical": "#ffff7d",
+        "tonalRamp": ["#2a2a10", "#3f3f18", "#58582c", "#787838", "#a2a244", "#c9c94e", "#eeee5a", "#ffff7d"]
+      },
+      "background": {
+        "role": "neutral",
+        "displayName": "Ground",
+        "canonical": "#1a1a1a",
+        "tonalRamp": ["#111111", "#1a1a1a", "#1c1c1c", "#252525", "#2e2e2e", "#393939", "#444444", "#585858"]
+      },
+      "card": {
+        "role": "neutral",
+        "displayName": "Raised Card",
+        "canonical": "#1c1c1c",
+        "tonalRamp": ["#111111", "#1b1b1b", "#1c1c1c", "#252525", "#2e2e2e", "#393939", "#444444", "#585858"]
+      },
+      "input": {
+        "role": "neutral",
+        "displayName": "Field Ground",
+        "canonical": "#2e2e2e",
+        "tonalRamp": ["#1b1b1b", "#252525", "#2e2e2e", "#393939", "#444444", "#585858", "#6b6b6b", "#9a9a9a"]
+      },
+      "border": {
+        "role": "neutral",
+        "displayName": "Hairline",
+        "canonical": "#454545",
+        "tonalRamp": ["#1b1b1b", "#252525", "#2e2e2e", "#393939", "#454545", "#585858", "#6b6b6b", "#9a9a9a"]
+      },
+      "tabular-muted": {
+        "role": "neutral",
+        "displayName": "Tabular Grey",
+        "canonical": "#9a9a9a",
+        "tonalRamp": ["#2e2e2e", "#444444", "#585858", "#6b6b6b", "#9a9a9a", "#c9c9c9", "#e8e8e8", "#fbfbfb"]
+      },
+      "muted-foreground": {
+        "role": "neutral",
+        "displayName": "Prose Grey",
+        "canonical": "#d9d9d9",
+        "tonalRamp": ["#393939", "#585858", "#6b6b6b", "#9a9a9a", "#c9c9c9", "#d9d9d9", "#e8e8e8", "#fbfbfb"]
+      },
+      "foreground": {
+        "role": "neutral",
+        "displayName": "Text Foreground",
+        "canonical": "#f2f2f2",
+        "tonalRamp": ["#2e2e2e", "#585858", "#9a9a9a", "#c9c9c9", "#d9d9d9", "#e8e8e8", "#f2f2f2", "#fbfbfb"]
+      },
+      "neutral-40": {
+        "role": "neutral",
+        "displayName": "Ramp Step 40 (non-text)",
+        "canonical": "#6b6b6b",
+        "tonalRamp": ["#1b1b1b", "#2e2e2e", "#393939", "#444444", "#585858", "#6b6b6b", "#9a9a9a", "#c9c9c9"]
+      }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display", "purpose": "The page h1 only, left-aligned, nothing above it. Figtree stands in for Runware's licensed `coxx`." },
+      "headline": { "displayName": "Headline", "purpose": "Section headings. Larger than the role above it in the inherited scale, which is keyed to role rather than size order." },
+      "title": { "displayName": "Title", "purpose": "Panel and empty-state headings." },
+      "body": { "displayName": "Body", "purpose": "Prose at a 62-68ch measure." },
+      "caption": { "displayName": "Caption", "purpose": "Secondary prose, sublabels, assumption fields." },
+      "label": { "displayName": "Label", "purpose": "Uppercase mono column-header and field-label voice. Never an eyebrow above a heading." },
+      "figure": { "displayName": "Figure", "purpose": "Every number in a table row or card, tabular-nums, fraction quieted." },
+      "figure-readout": { "displayName": "Figure Readout", "purpose": "The estimator dial. The only display-scale mono on the page, and the only display-scale green." }
+    },
+    "shadows": [],
+    "motion": [
+      {
+        "name": "settle",
+        "value": "settle 420ms cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "The one authored motion moment: a computed figure settling when its value changes. Eases from 55% opacity and -0.12em in Green Mid to a settled green, so nothing animates in from nothing. Neutralised by prefers-reduced-motion."
+      },
+      {
+        "name": "transition-colors",
+        "value": "150ms ease",
+        "purpose": "Default state transition on every interactive control; colour only, never size or position."
+      }
+    ],
+    "breakpoints": [
+      { "name": "sm", "value": "640px" },
+      { "name": "md", "value": "768px" },
+      { "name": "lg", "value": "1024px" },
+      { "name": "sheet-max", "value": "1440px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Row Action (Accent Outline)",
+      "kind": "button",
+      "refersTo": "action-accent-outline",
+      "description": "The primary per-row action. Tinted outline, never a solid fill: 416 filled green bars would spend the accent on furniture.",
+      "html": "<a class=\"ds-action-accent\" href=\"#\">Playground <svg class=\"ds-action-accent__icon\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M7 7h10v10\"/><path d=\"M7 17 17 7\"/></svg></a>",
+      "css": ".ds-action-accent { display: inline-flex; align-items: center; gap: 6px; height: 32px; padding: 0 10px; border: 1px solid rgba(175,255,159,0.4); border-radius: 7px; background: transparent; color: #afff9f; font-family: Figtree, ui-sans-serif, system-ui, sans-serif; font-size: 13px; font-weight: 500; white-space: nowrap; text-decoration: none; transition: background-color 150ms ease, border-color 150ms ease; } .ds-action-accent__icon { width: 14px; height: 14px; } .ds-action-accent:hover { background: rgba(175,255,159,0.1); border-color: rgba(175,255,159,0.7); } .ds-action-accent:focus-visible { outline: 2px solid #afff9f; outline-offset: 2px; border-radius: 4px; }"
+    },
+    {
+      "name": "Default Button",
+      "kind": "button",
+      "refersTo": "button-default",
+      "description": "The neutral control button. Hairline stroke on the ground; hovers to the muted tone.",
+      "html": "<button class=\"ds-btn-default\">Show notes</button>",
+      "css": ".ds-btn-default { display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 32px; padding: 0 16px; border: 1px solid #454545; border-radius: 7px; background: #1a1a1a; color: #f2f2f2; font-family: Figtree, ui-sans-serif, system-ui, sans-serif; font-size: 14px; font-weight: 500; white-space: nowrap; cursor: pointer; transition: background-color 150ms ease, color 150ms ease; } .ds-btn-default:hover { background: #292929; } .ds-btn-default:focus-visible { outline: 2px solid #afff9f; outline-offset: 2px; border-radius: 4px; } .ds-btn-default:disabled { opacity: 0.5; pointer-events: none; }"
+    },
+    {
+      "name": "Primary Button (solid green)",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "The rare solid green. Reserved for the unmissable single action, such as the skip link. Never used per row.",
+      "html": "<button class=\"ds-btn-primary\">Skip to the rate sheet</button>",
+      "css": ".ds-btn-primary { display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 32px; padding: 0 16px; border: 1px solid transparent; border-radius: 7px; background: #afff9f; color: #1c1c1c; font-family: Figtree, ui-sans-serif, system-ui, sans-serif; font-size: 14px; font-weight: 600; white-space: nowrap; cursor: pointer; transition: background-color 150ms ease; } .ds-btn-primary:hover { background: #90f77c; } .ds-btn-primary:focus-visible { outline: 2px solid #afff9f; outline-offset: 2px; border-radius: 4px; }"
+    },
+    {
+      "name": "Search Field",
+      "kind": "input",
+      "refersTo": "input-field",
+      "description": "The standard 44px field. Recessed rather than raised: the input tone at 30% behind a 1px stroke.",
+      "html": "<div class=\"ds-field\"><svg class=\"ds-field__icon\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"11\" cy=\"11\" r=\"8\"/><path d=\"m21 21-4.3-4.3\"/></svg><input class=\"ds-field__input\" type=\"search\" placeholder=\"Search 416 models by name, provider or model ID\"></div>",
+      "css": ".ds-field { position: relative; display: block; } .ds-field__icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); width: 16px; height: 16px; color: #9a9a9a; pointer-events: none; } .ds-field__input { width: 100%; height: 44px; padding: 0 12px 0 36px; border: 1px solid #2e2e2e; border-radius: 7px; background: rgba(46,46,46,0.3); color: #f2f2f2; font-family: Figtree, ui-sans-serif, system-ui, sans-serif; font-size: 14px; outline: none; transition: border-color 150ms ease; } .ds-field__input::placeholder { color: #9a9a9a; } .ds-field__input:hover { border-color: #585858; } .ds-field__input:focus-visible { outline: 2px solid #afff9f; outline-offset: 2px; }"
+    },
+    {
+      "name": "Numeric Field",
+      "kind": "input",
+      "refersTo": "input-field",
+      "description": "Any field holding a number takes the mono face, so the typed value is set in the same face as the figure it produces.",
+      "html": "<label class=\"ds-numfield\"><span class=\"ds-numfield__label\">Generations per month</span><input class=\"ds-numfield__input\" type=\"number\" value=\"10000\"></label>",
+      "css": ".ds-numfield { display: inline-flex; flex-direction: column; gap: 8px; } .ds-numfield__label { font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 11px; line-height: 1.1; letter-spacing: 0.075em; text-transform: uppercase; color: #d9d9d9; } .ds-numfield__input { width: 152px; height: 44px; padding: 0 12px; border: 1px solid #2e2e2e; border-radius: 7px; background: rgba(46,46,46,0.3); color: #f2f2f2; font-family: 'JetBrains Mono', ui-monospace, monospace; font-variant-numeric: tabular-nums; font-size: 14px; outline: none; transition: border-color 150ms ease; } .ds-numfield__input:hover { border-color: #585858; } .ds-numfield__input:focus-visible { outline: 2px solid #afff9f; outline-offset: 2px; }"
+    },
+    {
+      "name": "Facet Chip",
+      "kind": "chip",
+      "refersTo": "chip-facet",
+      "description": "A modality filter in the uppercase mono label voice, carrying its count at 60% opacity. Selected state is the one place green marks a filter.",
+      "html": "<button class=\"ds-chip\">Image <span class=\"ds-chip__count\">206</span></button> <button class=\"ds-chip ds-chip--active\" aria-pressed=\"true\">Video <span class=\"ds-chip__count\">113</span></button>",
+      "css": ".ds-chip { display: inline-flex; align-items: center; gap: 6px; height: 36px; padding: 0 12px; border: 1px solid #454545; border-radius: 7px; background: transparent; color: #d9d9d9; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 11px; line-height: 1.1; letter-spacing: 0.075em; text-transform: uppercase; cursor: pointer; transition: border-color 150ms ease, color 150ms ease, background-color 150ms ease; } .ds-chip:hover { border-color: #585858; color: #f2f2f2; } .ds-chip__count { font-size: 10px; font-variant-numeric: tabular-nums; opacity: 0.6; } .ds-chip--active { border-color: rgba(175,255,159,0.5); background: rgba(175,255,159,0.1); color: #afff9f; } .ds-chip:focus-visible { outline: 2px solid #afff9f; outline-offset: 2px; border-radius: 4px; }"
+    },
+    {
+      "name": "Segmented Control",
+      "kind": "nav",
+      "refersTo": "button-subtle",
+      "description": "A 7px hairline tray holding 5px segments, built on native radios so the focus ring lands on the real input.",
+      "html": "<div class=\"ds-seg\" role=\"radiogroup\" aria-label=\"Rank by\"><span class=\"ds-seg__item ds-seg__item--on\">Per month</span><span class=\"ds-seg__item\">Per 1,000</span><span class=\"ds-seg__item\">Unit price</span></div>",
+      "css": ".ds-seg { display: inline-flex; padding: 2px; border: 1px solid #454545; border-radius: 7px; background: rgba(46,46,46,0.3); } .ds-seg__item { display: flex; align-items: center; justify-content: center; height: 40px; padding: 0 12px; border-radius: 5px; color: #9a9a9a; font-family: Figtree, ui-sans-serif, system-ui, sans-serif; font-size: 13px; font-weight: 500; white-space: nowrap; cursor: pointer; transition: background-color 150ms ease, color 150ms ease; } .ds-seg__item:hover { color: #f2f2f2; } .ds-seg__item--on { background: #292929; color: #f2f2f2; }"
+    },
+    {
+      "name": "Estimator Readout",
+      "kind": "custom",
+      "refersTo": "card-surface",
+      "description": "The instrument's dial: the one place display-scale mono and display-scale green are permitted. Idle it shows the spread across the filtered set; ticked, the basket total.",
+      "html": "<div class=\"ds-readout\"><span class=\"ds-readout__label\">Per month at 10,000</span><p class=\"ds-readout__figure\">$6.00<span class=\"ds-readout__dash\">–</span>$130,000</p><p class=\"ds-readout__basis\">across 416 models<span class=\"ds-readout__quiet\"> · tick Compare to total the models you would actually run</span></p></div>",
+      "css": ".ds-readout { padding: 20px; border: 1px solid #454545; border-radius: 10px; background: #1c1c1c; } .ds-readout__label { display: block; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 11px; line-height: 1.1; letter-spacing: 0.075em; text-transform: uppercase; color: #d9d9d9; } .ds-readout__figure { margin: 6px 0 0; font-family: 'JetBrains Mono', ui-monospace, monospace; font-variant-numeric: tabular-nums; font-size: 1.875rem; line-height: 1; font-weight: 500; white-space: nowrap; color: #afff9f; animation: ds-settle 420ms cubic-bezier(0.16, 1, 0.3, 1); } .ds-readout__dash { margin: 0 6px; color: #6b6b6b; } .ds-readout__basis { margin: 6px 0 0; font-family: Figtree, ui-sans-serif, system-ui, sans-serif; font-size: 13px; line-height: 1.45; color: #d9d9d9; } .ds-readout__quiet { color: #9a9a9a; } @keyframes ds-settle { from { opacity: 0.55; transform: translateY(-0.12em); color: #90f77c; } to { opacity: 1; transform: translateY(0); } } @media (prefers-reduced-motion: reduce) { .ds-readout__figure { animation-duration: 0.01ms; } }"
+    },
+    {
+      "name": "Mobile Rate Card",
+      "kind": "card",
+      "refersTo": "card-surface",
+      "description": "Below 768px a row becomes a card whose largest element is the computed cost; the list price is demoted beside it as provenance.",
+      "html": "<li class=\"ds-ratecard\"><a class=\"ds-ratecard__name\" href=\"#\">FLUX.1 [schnell]</a><p class=\"ds-ratecard__meta\"><span class=\"ds-ratecard__modality\">Image</span><span class=\"ds-ratecard__config\">512x512 · 4 steps</span></p><div class=\"ds-ratecard__row\"><p><span class=\"ds-ratecard__label\">Your cost / month</span><span class=\"ds-ratecard__cost\">$6<span class=\"ds-ratecard__frac\">.00</span></span></p><p class=\"ds-ratecard__right\"><span class=\"ds-ratecard__label\">List price</span><span class=\"ds-ratecard__list\">$0<span class=\"ds-ratecard__frac\">.0006</span></span><span class=\"ds-ratecard__unit\">/ image</span></p></div></li>",
+      "css": ".ds-ratecard { list-style: none; padding: 16px; border: 1px solid #454545; border-radius: 10px; background: #1c1c1c; font-family: Figtree, ui-sans-serif, system-ui, sans-serif; } .ds-ratecard__name { display: block; color: #f2f2f2; font-size: 14px; font-weight: 500; text-decoration: none; } .ds-ratecard__meta { display: flex; align-items: center; gap: 8px; margin: 2px 0 0; } .ds-ratecard__modality { font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: 0.075em; text-transform: uppercase; color: #9a9a9a; } .ds-ratecard__config { font-size: 13px; color: #d9d9d9; } .ds-ratecard__row { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; margin-top: 16px; } .ds-ratecard__label { display: block; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: 0.075em; text-transform: uppercase; color: #9a9a9a; } .ds-ratecard__cost { display: block; margin-top: 4px; font-family: 'JetBrains Mono', ui-monospace, monospace; font-variant-numeric: tabular-nums; font-size: 2rem; line-height: 1; font-weight: 500; color: #f2f2f2; } .ds-ratecard__right { text-align: right; } .ds-ratecard__list { display: block; margin-top: 4px; font-family: 'JetBrains Mono', ui-monospace, monospace; font-variant-numeric: tabular-nums; font-size: 14px; color: #d9d9d9; } .ds-ratecard__unit { display: block; margin-top: 2px; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 10px; color: #9a9a9a; } .ds-ratecard__frac { color: #9a9a9a; }"
+    },
+    {
+      "name": "Table Row Figure",
+      "kind": "custom",
+      "refersTo": "card-surface",
+      "description": "The right-aligned figure stack used in every price column: mono figure with the fraction quieted, and a 10px sublabel rendered only when it has something to say.",
+      "html": "<div class=\"ds-fig\"><span class=\"ds-fig__value\">$0<span class=\"ds-fig__frac\">.0006</span></span><span class=\"ds-fig__sub\">/ image</span></div>",
+      "css": ".ds-fig { display: flex; flex-direction: column; align-items: flex-end; gap: 2px; white-space: nowrap; } .ds-fig__value { font-family: 'JetBrains Mono', ui-monospace, monospace; font-variant-numeric: tabular-nums; font-size: 14px; font-weight: 500; color: #f2f2f2; } .ds-fig__frac { color: #9a9a9a; } .ds-fig__sub { font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 10px; color: #9a9a9a; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Inherited Instrument",
+    "overview": "This world was not invented. Every colour, radius and semantic token was read off Runware's own shipped stylesheets on 2026-11-07 and carried over unchanged, so that the work reads as a pull request that could merge rather than a rebrand. Two substitutions are recorded as substitutions, not as choices: their heading face `coxx` (a grotesque with a variable GAPS axis) is licensed, so Figtree — their own sans — carries headings at weight 500 with tight tracking; and their wordmark is not used at all. Anyone extending this system should treat the palette and the scale as borrowed property: faithful inheritance outranks improvement, and the inherited oddities are not bugs to fix.\n\nOn top of that borrowed skin sits one original move: the surface behaves like an instrument, not a catalogue. A near-black ground (#1a1a1a) holds a single raised card (#1c1c1c) for the estimator, hairline rules (#454545) for everything else, and no shadows anywhere. Every number on the page — idle or computed, 10px or 36px — is JetBrains Mono with tabular figures, so columns of 416 rows never drift and no figure reflows as it ticks. The dial at the top is the only element set at display scale in mono, and it is green.\n\nColour is rationed. The surface is overwhelmingly neutral grey, and the green (#afff9f) is spent on exactly two things: the computed answer and the primary row action. A second inherited hue, the brand yellow (#ffff7d), appears only as a sourced-caveat and sale signal — the direction contract described a single-accent world, and the shipped build is a two-signal world; the build is the record. Nothing else is coloured. Density is high and deliberate: 48px table rows, 11px mono column headers, a 1440px measure wide enough for eight columns of figures without the digits pulling apart.",
+    "keyCharacteristics": [
+      "Inherited near-black ground with one raised card tone and hairline rules — no shadows at all",
+      "Every numeral in JetBrains Mono with tabular-nums, without exception",
+      "One green, spent only on computed answers, primary row actions, and selection state",
+      "11px uppercase mono at 0.075em as the universal label and column-header voice",
+      "Type scale keyed to semantic role rather than size order, inherited verbatim",
+      "Browser chrome (selection, caret, accent-color, scrollbars, focus ring) themed from the palette"
+    ],
+    "rules": [
+      { "name": "The Answer-Only Green Rule", "body": "Green marks a computed answer or a primary action, never a data cell. Per-row cost figures are set in the foreground grey: a column of 416 identical green values makes green a column colour instead of the mark of an answer. Selection keeps green because selection is state, matching the browser accent-color.", "section": "colors" },
+      { "name": "The Tinted-Not-Filled Rule", "body": "The per-row primary action is a green outline on a transparent ground with a 10% tint on hover — never a solid fill. 416 filled green bars would spend the accent on furniture and drown the figure above them.", "section": "colors" },
+      { "name": "The 40-Is-Not-Text Rule", "body": "#6b6b6b is a ramp step, not a text colour: it measures 3.27:1 on the ground. The quietest permitted text colour is #9a9a9a. Worst measured text contrast on the shipped surface is 6.19:1.", "section": "colors" },
+      { "name": "The Every-Figure-Is-Mono Rule", "body": "Every numeral on the surface is JetBrains Mono with font-variant-numeric: tabular-nums and font-feature-settings: \"tnum\" 1 — idle and filled, 10px footnote and 36px readout alike. Enforced globally on .font-mono and [data-numeric]. There is no exception.", "section": "typography" },
+      { "name": "The Quiet-Fraction Rule", "body": "A currency figure splits: the whole part in the foreground, the decimal fraction in #9a9a9a. The eye lands on the magnitude; the cents stay legible without competing.", "section": "typography" },
+      { "name": "The No-Kicker Rule", "body": "No eyebrow, kicker or label sits above a heading. The 11px mono label voice is for column headers and field labels — things that name a control or a column — never for decorating a headline.", "section": "typography" },
+      { "name": "The No-Shadow Rule", "body": "There are no shadows in this world, at rest or on hover. If an element needs to separate from what is behind it, give it the card tone and a hairline, not a drop shadow. A hard offset shadow would be foreign to this skin entirely.", "section": "elevation" },
+      { "name": "The One-Step Rule", "body": "There is exactly one raised tone. Surfaces do not stack: a card inside a card gets a hairline and the ground, never a third tone.", "section": "elevation" },
+      { "name": "The Stroke-Over-Fill Rule", "body": "Define an element with a 1px hairline before you define it with a fill. The only filled controls in this world are the segmented control's selected segment and the single solid-green button variant.", "section": "shapes" }
+    ],
+    "dos": [
+      "Do treat the palette, the 7px radius scale and the semantic token names as inherited property read from Runware's shipped stylesheets on 2026-11-07, not as original work.",
+      "Do set every numeral in JetBrains Mono with tabular-nums, at every size, in every state.",
+      "Do spend green only on a computed answer, a primary action, or selection state.",
+      "Do render the per-row primary action as a tinted green outline, never a solid fill.",
+      "Do keep the quietest text at #9a9a9a and hold new text to the measured 6.19:1 floor.",
+      "Do give every interactive control a 44px minimum touch target, except links inside running prose.",
+      "Do give a column exactly one job: a list price is always the published rate in its own unit; a computed cost is always the computed cost. A ranking control chooses what is compared, never what a column means.",
+      "Do render an absent value as an em dash, and never echo the data's own placeholder string (\"Default\") as if it were content.",
+      "Do theme the browser's own surfaces — selection, caret, accent-color, scrollbars — from this palette.",
+      "Do keep the focus ring visible everywhere: 2px #afff9f at 2px offset, with a 4px corner."
+    ],
+    "donts": [
+      "Don't add a shadow. This world has none, and a hard offset shadow would be foreign to it entirely.",
+      "Don't colour a per-row data figure green. Green on 416 rows becomes a column colour and stops meaning \"answer\".",
+      "Don't \"correct\" the inherited type scale because a smaller size carries a higher semantic rank. The scale is keyed to role, and faithfulness is the point.",
+      "Don't use #6b6b6b for text; it measures 3.27:1.",
+      "Don't place an eyebrow, kicker or mono label above a heading. The h1 carries itself.",
+      "Don't use Runware's wordmark, or their licensed `coxx` heading face, anywhere.",
+      "Don't introduce a third accent hue. Green answers, yellow flags a sourced exception, everything else is grey.",
+      "Don't stack a third surface tone. One raised tone, then hairlines.",
+      "Don't use glyph characters or an icon font in place of an icon; icons are inline SVG at 12-16px with a 2px stroke.",
+      "Don't add a second animation. One authored motion moment, reduced-motion safe.",
+      "Don't attach a live region per row. One shared announcer serves the whole sheet; the shipped page has exactly two."
+    ]
+  }
+}

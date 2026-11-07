@@ -28,11 +28,11 @@ import {
 } from "@/lib/pricing/filter";
 import {
   DEFAULT_ASSUMPTIONS,
-  estimate,
   type Assumptions,
   type NormaliseMode,
 } from "@/lib/pricing/estimate";
 import type { RateSheetEntry } from "@/lib/pricing/types";
+import { cn } from "@/lib/utils";
 
 const SORT_KEYS = [
   "price-asc",
@@ -113,15 +113,6 @@ export function RateSheet({ entries }: { entries: RateSheetEntry[] }) {
     [rows, params.mode, params.vol, assumptions],
   );
 
-  /** The cheapest way to do the stated volume, in the current view. */
-  const cheapest = useMemo(() => {
-    let best: { entry: RateSheetEntry; monthly: number } | null = null;
-    for (const entry of rows) {
-      const monthly = estimate(entry, params.vol, assumptions).monthly;
-      if (!best || monthly < best.monthly) best = { entry, monthly };
-    }
-    return best;
-  }, [rows, params.vol, assumptions]);
 
   /** Only show an assumption control if rows in view actually depend on it. */
   const needs = useMemo(() => {
@@ -139,6 +130,7 @@ export function RateSheet({ entries }: { entries: RateSheetEntry[] }) {
     () => params.stack.map((slug) => entries.find((e) => e.slug === slug)).filter(Boolean) as RateSheetEntry[],
     [params.stack, entries],
   );
+
 
   const toggleStack = useCallback(
     (slug: string) => {
@@ -181,7 +173,9 @@ export function RateSheet({ entries }: { entries: RateSheetEntry[] }) {
               ...(patch.cacheHitRate !== undefined ? { cache: patch.cacheHitRate } : {}),
             })
           }
-          cheapest={cheapest}
+          spread={bounds}
+          resultCount={rows.length}
+          stackCount={stackEntries.length}
           needs={needs}
           notes={params.notes}
         />
@@ -201,7 +195,6 @@ export function RateSheet({ entries }: { entries: RateSheetEntry[] }) {
               minPrice={params.min}
               maxPrice={params.max}
               onPriceRange={(min, max) => setParams({ min, max })}
-              bounds={bounds}
               mode={params.mode}
               resultCount={rows.length}
               totalCount={entries.length}
@@ -226,7 +219,14 @@ export function RateSheet({ entries }: { entries: RateSheetEntry[] }) {
           </Button>
         </div>
 
-        <div id="rate-sheet" className="scroll-mt-6">
+        {/*
+          While the comparison bar is pinned it would otherwise cover the last row at
+          rest, so the sheet reserves its height instead of overlapping content.
+        */}
+        <div
+          id="rate-sheet"
+          className={cn("scroll-mt-6", stackEntries.length > 0 && "pb-28 sm:pb-24")}
+        >
           <RateTable rows={rows} ctx={ctx} />
           <RateCards rows={rows} ctx={ctx} />
         </div>
