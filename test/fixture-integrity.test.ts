@@ -50,7 +50,8 @@ describe("rate sheet fixture", () => {
     expect(tokenRates.length).toBeGreaterThan(0);
 
     for (const { slug, r } of tokenRates) {
-      expect(r.amount, slug).toBeCloseTo(r.rawAmount * 1e6, 9);
+      expect(r.rawAmount, slug).toBeTypeOf("number");
+      expect(r.amount, slug).toBeCloseTo(r.rawAmount! * 1e6, 9);
       // A per-token figure mistakenly shown as a per-1M figure would land here.
       expect(r.amount, `${slug} ${r.label}`).toBeLessThan(1000);
     }
